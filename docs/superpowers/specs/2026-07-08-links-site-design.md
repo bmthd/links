@@ -66,7 +66,7 @@ litlink 風の 1 ページ静的サイト。日本語のみ。想定読者は X 
 ## メタ情報
 
 - `<title>`: じょうげん | links
-- description: 一行(実装時に草案しレビュー)
+- description: 「じょうげんのリンク集。SNS・Webアプリ・同人誌の入り口をまとめています。」
 - OGP: summary カード(`twitter:card: summary`)。画像はアバター流用
 - favicon: アバターから生成
 
