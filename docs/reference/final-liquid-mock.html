@@ -1,0 +1,96 @@
+<span data-screen="lg6-final" style="display:none"></span>
+<link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;700&family=Zen+Maru+Gothic:wght@400;700&display=swap" rel="stylesheet">
+
+<h2>完成形の最終確認</h2>
+<p class="subtitle">確定分: Liquid Glass / リニアグラデーション背景 / ブルー #38BDF8 / ガラス標準強度 / 英字ラベル見出し / prefers-color-scheme 追従。残りはフォントと背景アニメーションだけです。</p>
+
+<style>
+@keyframes drift1 { 0%,100%{ transform:translate(0,0);} 50%{ transform:translate(30px,20px);} }
+@keyframes drift2 { 0%,100%{ transform:translate(0,0);} 50%{ transform:translate(-25px,-15px);} }
+.fpanel { position:relative; max-width:380px; margin:0 auto; border-radius:28px; padding:34px 26px; overflow:hidden; font-family:system-ui,sans-serif; background:linear-gradient(160deg,#1d4e89 0%,#173a6b 45%,#0a1830 100%); }
+.fblob1 { position:absolute; border-radius:50%; width:180px; height:180px; background:#38bdf8; opacity:.5; top:-40px; left:-40px; z-index:1; animation:drift1 9s ease-in-out infinite; }
+.fblob2 { position:absolute; border-radius:50%; width:150px; height:150px; background:#5b7bff; opacity:.4; bottom:60px; right:-50px; z-index:1; animation:drift2 11s ease-in-out infinite; }
+.fz { position:relative; z-index:2; }
+.fbtn { border-radius:999px; background:rgba(255,255,255,.12); backdrop-filter:blur(16px) saturate(180%); -webkit-backdrop-filter:blur(16px) saturate(180%); border:1px solid rgba(255,255,255,.3); box-shadow:inset 0 1px 0 rgba(255,255,255,.4), inset 0 -1px 1px rgba(255,255,255,.08), 0 8px 24px rgba(0,0,0,.25); padding:13px; color:#fff; font-size:14px; text-align:center; text-shadow:0 1px 2px rgba(0,0,0,.3); cursor:pointer; transition:all .22s ease; }
+.fbtn:hover { transform:scale(1.03); background:rgba(255,255,255,.2); }
+.fcaps { color:#bfe8ff; font-size:11px; letter-spacing:.25em; text-align:center; text-shadow:0 1px 2px rgba(0,0,0,.4); margin-top:22px; }
+.fcol { display:flex; flex-direction:column; gap:11px; margin-top:10px; }
+</style>
+
+<div class="fpanel">
+  <div class="fblob1"></div>
+  <div class="fblob2"></div>
+  <div class="fz">
+    <div style="width:84px;height:84px;border-radius:50%;background:rgba(255,255,255,.25);backdrop-filter:blur(10px);margin:0 auto 12px;border:1px solid rgba(255,255,255,.4);box-shadow:inset 0 1px 0 rgba(255,255,255,.5);"></div>
+    <div style="text-align:center;color:#fff;font-size:20px;font-weight:700;text-shadow:0 1px 3px rgba(0,0,0,.4);">じょうげん</div>
+    <div style="text-align:center;color:rgba(255,255,255,.9);font-size:13px;margin-top:4px;text-shadow:0 1px 2px rgba(0,0,0,.4);">フロントエンドエンジニア / 個人開発とゲーム制作</div>
+    <div class="fcol" style="margin-top:22px;">
+      <div class="fbtn">𝕏 @j_ktwr</div>
+      <div class="fbtn">GitHub / bmthd</div>
+      <div class="fbtn">Zenn</div>
+      <div class="fbtn">ブログ blog.bmth.dev</div>
+    </div>
+    <div class="fcaps">WORKS</div>
+    <div class="fcol">
+      <div class="fbtn">ポイントスプリント</div>
+      <div class="fbtn">お品書きまとめ</div>
+    </div>
+    <div class="fcaps">DOUJINSHI</div>
+    <div class="fcol">
+      <div class="fbtn">BOOTH ブルーメソッド</div>
+      <div class="fbtn">メロンブックス サークルページ</div>
+    </div>
+  </div>
+</div>
+
+<h3 style="margin-top:28px;">フォント(1つ選択)</h3>
+<div class="options">
+  <div class="option" data-choice="ffont-system" onclick="toggleSelect(this)">
+    <div class="letter">A</div>
+    <div class="content"><h3>システムフォント</h3><p style="font-family:system-ui,sans-serif;">じょうげん — Apple風のLiquid Glassに一番馴染む。読み込みゼロで最速。上のモックがこれ。</p></div>
+  </div>
+  <div class="option" data-choice="ffont-mplus" onclick="toggleSelect(this)">
+    <div class="letter">B</div>
+    <div class="content"><h3 style="font-family:'M PLUS Rounded 1c',sans-serif;">M PLUS Rounded 1c</h3><p style="font-family:'M PLUS Rounded 1c',sans-serif;">じょうげん — 丸ゴでカジュアル寄りの印象に。</p></div>
+  </div>
+  <div class="option" data-choice="ffont-zenmaru" onclick="toggleSelect(this)">
+    <div class="letter">C</div>
+    <div class="content"><h3 style="font-family:'Zen Maru Gothic',sans-serif;">Zen Maru Gothic</h3><p style="font-family:'Zen Maru Gothic',sans-serif;">じょうげん — 柔らかく上品な丸ゴ。</p></div>
+  </div>
+</div>
+
+<h3 style="margin-top:24px;">背景の光のアニメーション(モックでは実際に動いています)</h3>
+<div class="options">
+  <div class="option" data-choice="fanim-yes" onclick="toggleSelect(this)">
+    <div class="letter">1</div>
+    <div class="content"><h3>あり</h3><p>上のモックのように光の玉がゆっくり漂う(CSSのみ・軽量)</p></div>
+  </div>
+  <div class="option" data-choice="fanim-no" onclick="toggleSelect(this)">
+    <div class="letter">2</div>
+    <div class="content"><h3>なし</h3><p>静止した背景にする</p></div>
+  </div>
+</div>
+
+<h3 style="margin-top:24px;">確定</h3>
+<div class="options">
+  <div class="option" data-choice="fdone-ok" onclick="toggleSelect(this)">
+    <div class="letter">✓</div>
+    <div class="content"><h3>これで全項目確定!</h3><p>フォントとアニメーションを選んでからクリックしてください。ブレストを終了します。</p></div>
+  </div>
+  <div class="option" data-choice="fdone-tweak" onclick="toggleSelect(this)">
+    <div class="letter">…</div>
+    <div class="content"><h3>まだ直したい点がある</h3><p>クリックしたうえで、内容をターミナルに書いてください。</p></div>
+  </div>
+</div>
+
+<script>
+(function(){
+  var CURRENT = "lg6-final";
+  setInterval(function(){
+    fetch("/", {cache:"no-store"}).then(function(r){return r.text();}).then(function(t){
+      var m = t.match(/data-screen="([^"]+)"/);
+      if (m && m[1] !== CURRENT) location.reload();
+    }).catch(function(){});
+  }, 4000);
+})();
+</script>
