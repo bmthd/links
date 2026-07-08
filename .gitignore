@@ -1,5 +1,7 @@
 node_modules/
 dist/
 src/styled-system/
+src/pages.gen.ts
 .wrangler/
 *.log
+.playwright-cli/

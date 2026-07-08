@@ -5,7 +5,7 @@ const globalCss = defineGlobalStyles({
     fontFamily: "'M PLUS Rounded 1c', sans-serif",
     minHeight: '100dvh',
     color: 'text',
-    backgroundImage: 'page',
+    backgroundGradient: 'page',
     backgroundAttachment: 'fixed',
   },
   '.glass': {
