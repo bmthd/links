@@ -1,0 +1,27 @@
+{
+  "name": "links",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "waku dev",
+    "build": "waku build",
+    "preview": "waku start",
+    "test": "vitest run",
+    "check-build": "node scripts/check-build.mjs"
+  },
+  "dependencies": {
+    "@fontsource/m-plus-rounded-1c": "^5.2.10",
+    "react": "^19.2.7",
+    "react-dom": "^19.2.7",
+    "waku": "1.0.0-beta.6"
+  },
+  "devDependencies": {
+    "@pandacss/dev": "^1.11.4",
+    "@types/react": "^19.2.17",
+    "@types/react-dom": "^19.2.3",
+    "typescript": "^6.0.3",
+    "vitest": "^4.1.10",
+    "wrangler": "^4.107.0"
+  }
+}
