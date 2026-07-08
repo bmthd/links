@@ -8,7 +8,8 @@
     "build": "waku build",
     "preview": "waku start",
     "test": "vitest run",
-    "check-build": "node scripts/check-build.mjs"
+    "check-build": "node scripts/check-build.mjs",
+    "prepare": "panda codegen"
   },
   "dependencies": {
     "@fontsource/m-plus-rounded-1c": "^5.2.10",
