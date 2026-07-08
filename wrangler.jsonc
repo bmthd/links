@@ -1,0 +1,9 @@
+{
+  "name": "links",
+  "compatibility_date": "2026-07-01",
+  "assets": {
+    "directory": "./dist/public",
+    "html_handling": "drop-trailing-slash"
+  },
+  "routes": [{ "pattern": "links.bmth.dev", "custom_domain": true }]
+}
