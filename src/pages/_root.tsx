@@ -28,41 +28,40 @@ const THEME_INIT_SCRIPT =
 // "CSS hides by default, JS reveals", which would leave content invisible
 // forever without JS.
 //
-// Repeat visitors skip the hide+fade entirely: once a font load completes,
-// a localStorage flag is set, and subsequent visits return early before
-// touching `data-fonts` at all. This is a heuristic (it doesn't guarantee
-// the font is still cached), not a precise cache check — precise cache
-// detection isn't reliably available this early anyway, since the
-// @fontsource `@font-face` rules (declared in the stylesheet imported by
-// _layout.tsx) may not be registered in `document.fonts` yet when this
-// script runs, so `document.fonts.check()` could wrongly report `false`
-// even for a cached font. `document.fonts.load()` is used instead to kick
-// off loading (or resolve immediately if already available), chained into
-// `document.fonts.ready` as the actual completion signal, which correctly
-// waits for the real glyph subsets the page's Japanese text needs
-// regardless of registration timing.
+// The gate runs on EVERY visit — there is deliberately no "already visited"
+// persistence (an earlier revision skipped the gate via a localStorage flag,
+// which leaked FOUT whenever the flag survived but the browser's font cache
+// didn't, e.g. after cache eviction or a hard reload). Whether the fonts are
+// actually cached is instead detected by how fast they resolve: if loading
+// completes within ~100ms of the gate going up (browser font cache hit) the
+// fade transition is skipped (`--font-fade-duration` set to 0s) so repeat
+// visitors get an instant reveal — at worst a frame of hidden content —
+// while a genuine cold load gets the 0.4s fade.
 //
-// If loading is somehow already complete (or resolves) within ~100ms of
-// starting — e.g. a warm HTTP cache without the localStorage flag (cleared
-// separately) — the fade transition is skipped (`--font-fade-duration` set
-// to 0s) so a fast, already-cached load never forces the full fade
-// duration; a slow/failed load still gets the fade and is capped at 2.5s by
-// `Promise.race` so content is never hidden indefinitely.
+// `document.fonts.check()` is not used for that detection: the @fontsource
+// `@font-face` rules (declared in the stylesheet imported by _layout.tsx)
+// may not be registered in `document.fonts` yet when this script runs, so
+// `check()` could wrongly report `false` even for a cached font.
+// `document.fonts.load()` is used instead to kick off loading (or resolve
+// immediately if already available), chained into `document.fonts.ready` as
+// the actual completion signal, which correctly waits for the real glyph
+// subsets the page's Japanese text needs regardless of registration timing.
+//
+// A slow or failed load is capped at 3s by `Promise.race` so content is
+// never hidden indefinitely.
 const FONT_FADE_INIT_SCRIPT = `(function(){
-  try{if(localStorage.getItem('fontsLoaded')==='1')return}catch(e){}
   if(!('fonts' in document))return;
   var html=document.documentElement,start=Date.now();
   html.dataset.fonts='loading';
   function reveal(){
     if(Date.now()-start<100)html.style.setProperty('--font-fade-duration','0s');
     delete html.dataset.fonts;
-    try{localStorage.setItem('fontsLoaded','1')}catch(e){}
   }
   var loaded=Promise.all([
     document.fonts.load('400 1em "M PLUS Rounded 1c"'),
     document.fonts.load('700 1em "M PLUS Rounded 1c"')
   ]).catch(function(){}).then(function(){return document.fonts.ready});
-  var timeout=new Promise(function(resolve){setTimeout(resolve,2500)});
+  var timeout=new Promise(function(resolve){setTimeout(resolve,3000)});
   Promise.race([loaded,timeout]).then(reveal);
 })();`;
 
