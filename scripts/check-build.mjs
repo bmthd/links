@@ -3,6 +3,7 @@ import { readFileSync } from 'node:fs';
 const html = readFileSync('dist/public/index.html', 'utf8');
 
 const required = [
+  'lang="ja"',
   'じょうげん',
   'フルスタック趣味人',
   'https://x.com/j_ktwr',

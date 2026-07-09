@@ -3,7 +3,8 @@ import { defineConfig } from 'waku/config';
 export default defineConfig({
   vite: {
     build: {
-      // Vite's default CSS minifier (lightningcss) treats a standard
+      // Waku beta's rolldown-vite defaults to the lightningcss CSS
+      // minifier (standard Vite defaults to esbuild), which treats a standard
       // property and its vendor-prefixed variant (e.g. `backdrop-filter` /
       // `-webkit-backdrop-filter`) as the same logical property and keeps
       // only the last declaration, silently dropping the standard one that

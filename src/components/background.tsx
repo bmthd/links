@@ -1,9 +1,12 @@
 import { css } from '../styled-system/css';
 
+// Low blur keeps the blobs crisp enough for their drift to be perceptible,
+// matching the confirmed mock (docs/reference/final-liquid-mock.html renders
+// sharp circles); the previous blur(90px) smeared them into a static haze.
 const blobBase = {
   position: 'absolute',
   borderRadius: '50%',
-  filter: 'blur(90px)',
+  filter: 'blur(16px)',
   opacity: 0.5,
   _motionReduce: { animation: 'none' },
 } as const;
@@ -49,7 +52,7 @@ export function Background() {
           width: '260px',
           height: '260px',
           background: 'accent',
-          opacity: 0.35,
+          opacity: 0.4,
           animation: 'float3 10s ease-in-out infinite',
         })}
       />
