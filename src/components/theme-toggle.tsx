@@ -1,5 +1,6 @@
 "use client";
 
+import { Moon, Sun } from "lucide-react";
 import { css, cx } from "../styled-system/css";
 
 // The current theme lives in `data-theme` on <html> (set before paint by the
@@ -41,12 +42,16 @@ export function ThemeToggle() {
         }),
       )}
     >
-      <span aria-hidden className={css({ display: "inline", _light: { display: "none" } })}>
-        ☾
-      </span>
-      <span aria-hidden className={css({ display: "none", _light: { display: "inline" } })}>
-        ☀
-      </span>
+      <Moon
+        aria-hidden
+        size={20}
+        className={css({ display: "block", _light: { display: "none" } })}
+      />
+      <Sun
+        aria-hidden
+        size={20}
+        className={css({ display: "none", _light: { display: "block" } })}
+      />
     </button>
   );
 }
