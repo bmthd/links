@@ -13,12 +13,11 @@ const globalCss = defineGlobalStyles({
   // while `<html data-fonts="loading">` and fade to visible once that
   // attribute is removed. The background (no `data-fade` marker) is
   // unaffected and stays visible throughout, so the page is never a blank
-  // white/blank screen. `--font-fade-duration` defaults to a real fade but
-  // is forced to `0s` by the script when the fonts resolve near-instantly
-  // (browser font cache hit), so a cached load never forces the full fade
-  // duration.
+  // white/blank screen. The fade always runs at this duration, even on a
+  // browser font cache hit — skipping it for fast resolutions used to cause
+  // a one-frame flash of `data-fade` elements popping in instantly.
   "[data-fade]": {
-    transition: "opacity var(--font-fade-duration, .4s) ease",
+    transition: "opacity .3s ease-out",
   },
   '[data-fonts="loading"] [data-fade]': {
     opacity: 0,

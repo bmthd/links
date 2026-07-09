@@ -31,14 +31,15 @@ const THEME_INIT_SCRIPT =
 // The gate runs on EVERY visit — there is deliberately no "already visited"
 // persistence (an earlier revision skipped the gate via a localStorage flag,
 // which leaked FOUT whenever the flag survived but the browser's font cache
-// didn't, e.g. after cache eviction or a hard reload). Whether the fonts are
-// actually cached is instead detected by how fast they resolve: if loading
-// completes within ~100ms of the gate going up (browser font cache hit) the
-// fade transition is skipped (`--font-fade-duration` set to 0s) so repeat
-// visitors get an instant reveal — at worst a frame of hidden content —
-// while a genuine cold load gets the 0.4s fade.
+// didn't, e.g. after cache eviction or a hard reload). The fade also always
+// runs at its full duration, even on a browser font cache hit: an earlier
+// revision skipped the fade (`--font-fade-duration: 0s`) when fonts resolved
+// within ~100ms, but that instant reveal itself showed up as a one-frame
+// flash of the `data-fade` elements (notably the theme toggle button)
+// popping in. A short, unconditional fade reads as smooth in both the cold
+// and cached cases.
 //
-// `document.fonts.check()` is not used for that detection: the @fontsource
+// `document.fonts.check()` is not used to detect readiness: the @fontsource
 // `@font-face` rules (declared in the stylesheet imported by _layout.tsx)
 // may not be registered in `document.fonts` yet when this script runs, so
 // `check()` could wrongly report `false` even for a cached font.
@@ -51,10 +52,9 @@ const THEME_INIT_SCRIPT =
 // never hidden indefinitely.
 const FONT_FADE_INIT_SCRIPT = `(function(){
   if(!('fonts' in document))return;
-  var html=document.documentElement,start=Date.now();
+  var html=document.documentElement;
   html.dataset.fonts='loading';
   function reveal(){
-    if(Date.now()-start<100)html.style.setProperty('--font-fade-duration','0s');
     delete html.dataset.fonts;
   }
   var loaded=Promise.all([

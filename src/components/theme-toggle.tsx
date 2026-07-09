@@ -72,7 +72,13 @@ export function ThemeToggle() {
           fontSize: "lg",
           color: { base: "#fff", _light: "#0F2A4A" },
           cursor: "pointer",
-          transition: "transform .2s ease, filter .2s ease",
+          // Includes `opacity .3s ease-out` (matching the `[data-fade]` global
+          // rule in panda.config.ts) because this inline `transition` shorthand
+          // otherwise wins the cascade over that rule and drops opacity from
+          // the button's transition-property list entirely, making the FOUT
+          // fade-in (see FONT_FADE_INIT_SCRIPT in _root.tsx) snap instantly
+          // instead of fading.
+          transition: "opacity .3s ease-out, transform .2s ease, filter .2s ease",
           _hover: { transform: "scale(1.08)", filter: "brightness(1.12)" },
           _motionReduce: { transition: "none", _hover: { transform: "none" } },
         }),
