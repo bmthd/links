@@ -12,10 +12,8 @@ function applyTheme(next: "light" | "dark") {
   localStorage.setItem("theme", next);
 }
 
-// Toggle the theme with an "おしゃれ" reveal: the incoming theme is wiped in
-// as a clip-path circle expanding from the toggle button. Falls back to an
-// instant swap when the View Transitions API is unavailable or the user
-// prefers reduced motion, so no one is left without a working toggle.
+// Reveals the incoming theme with a clip-path circle growing from the button,
+// falling back to an instant swap without View Transitions or under reduced motion.
 function toggleTheme(event: React.MouseEvent<HTMLButtonElement>) {
   const root = document.documentElement;
   const next = root.dataset.theme === "light" ? "dark" : "light";
@@ -27,8 +25,7 @@ function toggleTheme(event: React.MouseEvent<HTMLButtonElement>) {
     return;
   }
 
-  // Emanate the reveal from the button's center so it works for pointer and
-  // keyboard activation alike (a keyboard click reports 0,0 for clientX/Y).
+  // Center on the button so keyboard activation (clientX/Y 0,0) reveals too.
   const rect = event.currentTarget.getBoundingClientRect();
   const x = rect.left + rect.width / 2;
   const y = rect.top + rect.height / 2;
