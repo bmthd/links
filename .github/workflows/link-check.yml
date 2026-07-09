@@ -1,0 +1,50 @@
+name: Link Check
+on:
+  schedule:
+    - cron: "0 0 * * 1" # 毎週月曜 09:00 JST (00:00 UTC)
+  workflow_dispatch:
+jobs:
+  link-check:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      issues: write
+    steps:
+      - uses: actions/checkout@v7
+      - uses: pnpm/action-setup@v6
+        with:
+          version: 11
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 24
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - name: Check links
+        id: check
+        run: |
+          set +e
+          node scripts/check-links.mjs | tee link-check-result.txt
+          exit_code=${PIPESTATUS[0]}
+          set -e
+          {
+            echo "result<<LINK_CHECK_EOF"
+            cat link-check-result.txt
+            echo "LINK_CHECK_EOF"
+          } >> "$GITHUB_OUTPUT"
+          exit "$exit_code"
+      - name: Create or comment issue on failure
+        if: failure() && steps.check.outcome == 'failure'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RESULT: ${{ steps.check.outputs.result }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: |
+          title="リンク切れ検知"
+          body=$(printf '週次リンクチェックでリンク切れを検知しました。\n\nWorkflow run: %s\n\n```\n%s\n```' "$RUN_URL" "$RESULT")
+          existing=$(gh issue list --state open --search "in:title \"$title\"" --json number,title \
+            --jq "[.[] | select(.title == \"$title\")][0].number // empty")
+          if [ -n "$existing" ]; then
+            gh issue comment "$existing" --body "$body"
+          else
+            gh issue create --title "$title" --body "$body"
+          fi
