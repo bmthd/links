@@ -1,0 +1,72 @@
+name: Preview
+on:
+  pull_request:
+jobs:
+  preview:
+    if: github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@v7
+      - uses: pnpm/action-setup@v6
+        with:
+          version: 11
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 24
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm build
+      - name: Compute preview alias
+        id: alias
+        run: |
+          alias=$(echo "${{ github.head_ref }}" | tr '[:upper:]' '[:lower:]' | sed -E 's/[^a-z0-9]+/-/g; s/^-+//; s/-+$//' | cut -c1-63)
+          if [ -z "$alias" ]; then
+            alias="pr-${{ github.event.pull_request.number }}"
+          fi
+          echo "alias=$alias" >> "$GITHUB_OUTPUT"
+      - name: Upload preview version
+        id: deploy
+        uses: cloudflare/wrangler-action@v4
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          command: versions upload --preview-alias ${{ steps.alias.outputs.alias }}
+      - name: Extract preview URL
+        id: url
+        env:
+          COMMAND_OUTPUT: ${{ steps.deploy.outputs.command-output }}
+          DEPLOYMENT_URL: ${{ steps.deploy.outputs.deployment-url }}
+        run: |
+          url=$(printf '%s' "$COMMAND_OUTPUT" | grep -Eo 'Version Preview Alias URL: https://[a-z0-9.-]+\.workers\.dev' | grep -Eo 'https://[a-z0-9.-]+\.workers\.dev' | head -n1)
+          if [ -z "$url" ]; then
+            url=$(printf '%s' "$COMMAND_OUTPUT" | grep -Eo 'Version Preview URL: https://[a-z0-9.-]+\.workers\.dev' | grep -Eo 'https://[a-z0-9.-]+\.workers\.dev' | head -n1)
+          fi
+          if [ -z "$url" ]; then
+            url="$DEPLOYMENT_URL"
+          fi
+          if [ -z "$url" ]; then
+            echo "::warning::プレビューURLは未発行です(preview_urls 設定が本番デプロイで同期された後の PR から有効になります)"
+          fi
+          echo "url=$url" >> "$GITHUB_OUTPUT"
+      - name: Comment preview URL on PR
+        uses: actions/github-script@v9
+        with:
+          script: |
+            const marker = '<!-- pr-preview-url -->';
+            const url = '${{ steps.url.outputs.url }}';
+            const message = url
+              ? `🔗 Preview: ${url}`
+              : '⏳ プレビューURLは未発行です(preview_urls 設定が本番デプロイで同期された後の PR から有効になります)';
+            const body = `${marker}\n${message}`;
+            const { owner, repo } = context.repo;
+            const issue_number = context.payload.pull_request.number;
+            const comments = await github.rest.issues.listComments({ owner, repo, issue_number });
+            const existing = comments.data.find((c) => c.body && c.body.includes(marker));
+            if (existing) {
+              await github.rest.issues.updateComment({ owner, repo, comment_id: existing.id, body });
+            } else {
+              await github.rest.issues.createComment({ owner, repo, issue_number, body });
+            }
