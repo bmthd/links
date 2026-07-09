@@ -12,12 +12,6 @@ function applyTheme(next: "light" | "dark") {
   localStorage.setItem("theme", next);
 }
 
-// `startViewTransition` is not yet in the DOM lib types; describe just the
-// slice we use so the enhancement stays type-safe without an `any` cast.
-type ViewTransitionDocument = Document & {
-  startViewTransition?: (callback: () => void) => { ready: Promise<void> };
-};
-
 // Toggle the theme with an "おしゃれ" reveal: the incoming theme is wiped in
 // as a clip-path circle expanding from the toggle button. Falls back to an
 // instant swap when the View Transitions API is unavailable or the user
@@ -25,11 +19,10 @@ type ViewTransitionDocument = Document & {
 function toggleTheme(event: React.MouseEvent<HTMLButtonElement>) {
   const root = document.documentElement;
   const next = root.dataset.theme === "light" ? "dark" : "light";
-  const doc = document as ViewTransitionDocument;
 
   const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-  if (!doc.startViewTransition || prefersReducedMotion) {
+  if (!document.startViewTransition || prefersReducedMotion) {
     applyTheme(next);
     return;
   }
@@ -44,7 +37,7 @@ function toggleTheme(event: React.MouseEvent<HTMLButtonElement>) {
     Math.max(y, window.innerHeight - y),
   );
 
-  const transition = doc.startViewTransition(() => applyTheme(next));
+  const transition = document.startViewTransition(() => applyTheme(next));
   transition.ready.then(() => {
     root.animate(
       {
