@@ -9,6 +9,7 @@
     "preview": "waku start",
     "typecheck": "tsc --noEmit",
     "test": "vp test run",
+    "check": "vp check",
     "check-build": "node scripts/check-build.mjs",
     "prepare": "panda codegen"
   },
