@@ -21,6 +21,7 @@ export default async function HomePage() {
       <Background />
       <ThemeToggle />
       <main
+        data-fade
         className={css({
           maxWidth: "28rem",
           marginX: "auto",
@@ -37,6 +38,7 @@ export default async function HomePage() {
         ))}
       </main>
       <footer
+        data-fade
         className={css({
           textAlign: "center",
           color: "textDim",
