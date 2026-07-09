@@ -10,7 +10,16 @@ const globalCss = defineGlobalStyles({
   },
   '.glass': {
     background: 'rgba(255,255,255,.12)',
-    backdropFilter: 'blur(16px) saturate(180%)',
+    // Written as raw kebab-case properties (prefix first, standard last) so
+    // Panda emits them verbatim instead of routing through its built-in
+    // `backdropFilter` utility, which always emits the pair in the opposite
+    // order (standard, then `-webkit-`). lightningcss's minifier only
+    // recognizes "vendor-prefixed fallback, then standard override" as an
+    // intentional compat pair to preserve when a build target still needs
+    // the prefix; the reverse order gets collapsed to whichever declaration
+    // is last. See waku.config.ts for the matching `build.cssTarget`.
+    '-webkit-backdrop-filter': 'blur(16px) saturate(180%)',
+    'backdrop-filter': 'blur(16px) saturate(180%)',
     border: '1px solid rgba(255,255,255,.3)',
     boxShadow:
       'inset 0 1px 0 rgba(255,255,255,.4), inset 0 -1px 1px rgba(255,255,255,.08), 0 8px 24px rgba(0,0,0,.25)',
