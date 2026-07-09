@@ -7,11 +7,56 @@ import { css, cx } from "../styled-system/css";
 // inline script in _root.tsx). The icon is switched purely in CSS from that
 // attribute, so the server-rendered markup never depends on the theme and
 // there is no hydration mismatch.
-function toggleTheme() {
+function applyTheme(next: "light" | "dark") {
+  document.documentElement.dataset.theme = next;
+  localStorage.setItem("theme", next);
+}
+
+// `startViewTransition` is not yet in the DOM lib types; describe just the
+// slice we use so the enhancement stays type-safe without an `any` cast.
+type ViewTransitionDocument = Document & {
+  startViewTransition?: (callback: () => void) => { ready: Promise<void> };
+};
+
+// Toggle the theme with an "おしゃれ" reveal: the incoming theme is wiped in
+// as a clip-path circle expanding from the toggle button. Falls back to an
+// instant swap when the View Transitions API is unavailable or the user
+// prefers reduced motion, so no one is left without a working toggle.
+function toggleTheme(event: React.MouseEvent<HTMLButtonElement>) {
   const root = document.documentElement;
   const next = root.dataset.theme === "light" ? "dark" : "light";
-  root.dataset.theme = next;
-  localStorage.setItem("theme", next);
+  const doc = document as ViewTransitionDocument;
+
+  const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  if (!doc.startViewTransition || prefersReducedMotion) {
+    applyTheme(next);
+    return;
+  }
+
+  // Emanate the reveal from the button's center so it works for pointer and
+  // keyboard activation alike (a keyboard click reports 0,0 for clientX/Y).
+  const rect = event.currentTarget.getBoundingClientRect();
+  const x = rect.left + rect.width / 2;
+  const y = rect.top + rect.height / 2;
+  const endRadius = Math.hypot(
+    Math.max(x, window.innerWidth - x),
+    Math.max(y, window.innerHeight - y),
+  );
+
+  const transition = doc.startViewTransition(() => applyTheme(next));
+  transition.ready.then(() => {
+    root.animate(
+      {
+        clipPath: [`circle(0px at ${x}px ${y}px)`, `circle(${endRadius}px at ${x}px ${y}px)`],
+      },
+      {
+        duration: 550,
+        easing: "cubic-bezier(0.4, 0, 0.2, 1)",
+        pseudoElement: "::view-transition-new(root)",
+      },
+    );
+  });
 }
 
 export function ThemeToggle() {

@@ -8,6 +8,17 @@ const globalCss = defineGlobalStyles({
     backgroundGradient: "page",
     backgroundAttachment: "fixed",
   },
+  // Theme switching uses the View Transitions API (see theme-toggle.tsx): the
+  // new theme is revealed with a clip-path circle expanding from the toggle
+  // button. The default UA cross-fade on the root snapshots would fight that
+  // reveal, so it is disabled here and the new snapshot is stacked on top of
+  // the old one, letting the clip-path do all the visible work.
+  "::view-transition-old(root), ::view-transition-new(root)": {
+    animation: "none",
+    mixBlendMode: "normal",
+  },
+  "::view-transition-old(root)": { zIndex: 0 },
+  "::view-transition-new(root)": { zIndex: 1 },
   ".glass": {
     background: "rgba(255,255,255,.12)",
     // Written as raw kebab-case properties (prefix first, standard last) so
