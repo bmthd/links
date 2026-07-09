@@ -8,6 +8,34 @@ const globalCss = defineGlobalStyles({
     backgroundGradient: "page",
     backgroundAttachment: "fixed",
   },
+  // FOUT fade-in (see FONT_FADE_INIT_SCRIPT in src/pages/_root.tsx): elements
+  // marked `data-fade` (main / footer / the theme toggle button) are hidden
+  // while `<html data-fonts="loading">` and fade to visible once that
+  // attribute is removed. The background (no `data-fade` marker) is
+  // unaffected and stays visible throughout, so the page is never a blank
+  // white/blank screen. The fade always runs at this duration, even on a
+  // browser font cache hit — skipping it for fast resolutions used to cause
+  // a one-frame flash of `data-fade` elements popping in instantly.
+  "[data-fade]": {
+    transition: "opacity .3s ease-out",
+  },
+  '[data-fonts="loading"] [data-fade]': {
+    opacity: 0,
+    pointerEvents: "none",
+  },
+  "@media (prefers-reduced-motion: reduce)": {
+    "[data-fade]": {
+      transition: "none",
+    },
+  },
+  // Drop the UA cross-fade and stack the new snapshot on top so the theme
+  // toggle's clip-path reveal (theme-toggle.tsx) does all the visible work.
+  "::view-transition-old(root), ::view-transition-new(root)": {
+    animation: "none",
+    mixBlendMode: "normal",
+  },
+  "::view-transition-old(root)": { zIndex: 0 },
+  "::view-transition-new(root)": { zIndex: 1 },
   ".glass": {
     background: "rgba(255,255,255,.12)",
     // Written as raw kebab-case properties (prefix first, standard last) so
