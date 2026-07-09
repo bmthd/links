@@ -24,6 +24,8 @@ export const sections: readonly LinkSection[] = [
     items: [
       { label: "ポイントスプリント", url: "https://point-sprint.bmth.dev/" },
       { label: "お品書きまとめ", url: "https://oshinagaki.bmth.dev/" },
+      { label: "PRリスト", url: "https://pr.bmth.dev/" },
+      { label: "渋滞シミュレーション", url: "https://traffic-jam.bmth.dev/" },
     ],
   },
   {

@@ -1,6 +1,8 @@
 {
   "name": "links",
   "compatibility_date": "2026-07-01",
+  "workers_dev": false,
+  "preview_urls": true,
   "assets": {
     "directory": "./dist/public",
     "html_handling": "drop-trailing-slash",
