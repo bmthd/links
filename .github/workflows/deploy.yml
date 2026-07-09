@@ -18,6 +18,13 @@ jobs:
       - run: pnpm test
       - run: pnpm check
       - run: pnpm build
+        env:
+          # Cloudflare Web Analytics beacon token. Public by design (it's
+          # shipped inside the built HTML), so an Actions *variable* is used
+          # instead of a secret. See README for setup. Left unset until the
+          # repository owner registers it, in which case the beacon script
+          # is simply omitted from the build (see src/pages/_root.tsx).
+          VITE_CF_BEACON_TOKEN: ${{ vars.CF_BEACON_TOKEN }}
       - run: pnpm check-build
       - uses: cloudflare/wrangler-action@v4
         with:

@@ -65,6 +65,20 @@ const FONT_FADE_INIT_SCRIPT = `(function(){
   Promise.race([loaded,timeout]).then(reveal);
 })();`;
 
+// Cloudflare Web Analytics beacon (cookieless, free). The site token is
+// issued per-domain in the Cloudflare dashboard (Web Analytics -> Add a
+// site -> Manual setup, since automatic JS injection doesn't apply to sites
+// served from Workers). It's injected at build time via the `VITE_`-
+// prefixed env var below, which Vite inlines into the static-rendered HTML
+// (see `getConfig`'s `render: "static"`); see README for the Actions
+// variable setup.
+//
+// The tag is only emitted when the token is present, so PR preview builds
+// and forks -- which never receive the token -- render no beacon at all
+// rather than shipping a broken/empty one, keeping their traffic out of the
+// production analytics dashboard.
+const CF_BEACON_TOKEN = import.meta.env.VITE_CF_BEACON_TOKEN;
+
 export default function Root({ children }: { children: ReactNode }) {
   return (
     <ErrorBoundary>
@@ -72,6 +86,13 @@ export default function Root({ children }: { children: ReactNode }) {
         <head>
           <script dangerouslySetInnerHTML={{ __html: THEME_INIT_SCRIPT }} />
           <script dangerouslySetInnerHTML={{ __html: FONT_FADE_INIT_SCRIPT }} />
+          {CF_BEACON_TOKEN && (
+            <script
+              defer
+              src="https://static.cloudflareinsights.com/beacon.min.js"
+              data-cf-beacon={JSON.stringify({ token: CF_BEACON_TOKEN })}
+            />
+          )}
         </head>
         <body>{children}</body>
       </html>
