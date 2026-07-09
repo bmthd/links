@@ -1,5 +1,5 @@
-import type { ReactNode } from 'react';
-import { ErrorBoundary } from 'waku/router/client';
+import type { ReactNode } from "react";
+import { ErrorBoundary } from "waku/router/client";
 
 // Waku's built-in default root renders `<html>` without a `lang` attribute
 // (see `DefaultRoot` in `waku/router/create-pages.js`). This file overrides
@@ -27,5 +27,5 @@ export default function Root({ children }: { children: ReactNode }) {
 }
 
 export const getConfig = async () => {
-  return { render: 'static' } as const;
+  return { render: "static" } as const;
 };

@@ -1,11 +1,11 @@
-import { css } from '../styled-system/css';
-import { Background } from '../components/background';
-import { ProfileCard } from '../components/profile-card';
-import { LinkSectionBlock } from '../components/link-section';
-import { ThemeToggle } from '../components/theme-toggle';
-import { sections } from '../lib/links';
+import { css } from "../styled-system/css";
+import { Background } from "../components/background";
+import { ProfileCard } from "../components/profile-card";
+import { LinkSectionBlock } from "../components/link-section";
+import { ThemeToggle } from "../components/theme-toggle";
+import { sections } from "../lib/links";
 
-const DESCRIPTION = 'じょうげんのリンク集。SNS・Webアプリ・同人誌の入り口をまとめています。';
+const DESCRIPTION = "じょうげんのリンク集。SNS・Webアプリ・同人誌の入り口をまとめています。";
 
 export default async function HomePage() {
   return (
@@ -22,13 +22,13 @@ export default async function HomePage() {
       <ThemeToggle />
       <main
         className={css({
-          maxWidth: '28rem',
-          marginX: 'auto',
-          paddingX: '5',
-          paddingY: '12',
-          display: 'flex',
-          flexDirection: 'column',
-          gap: '6',
+          maxWidth: "28rem",
+          marginX: "auto",
+          paddingX: "5",
+          paddingY: "12",
+          display: "flex",
+          flexDirection: "column",
+          gap: "6",
         })}
       >
         <ProfileCard />
@@ -38,18 +38,18 @@ export default async function HomePage() {
       </main>
       <footer
         className={css({
-          textAlign: 'center',
-          color: 'textDim',
-          fontSize: 'xs',
-          paddingBottom: '8',
+          textAlign: "center",
+          color: "textDim",
+          fontSize: "xs",
+          paddingBottom: "8",
         })}
       >
-        Made by じょうげん ·{' '}
+        Made by じょうげん ·{" "}
         <a
           href="https://github.com/bmthd/links"
           target="_blank"
           rel="noopener"
-          className={css({ textDecoration: 'underline', _hover: { color: 'text' } })}
+          className={css({ textDecoration: "underline", _hover: { color: "text" } })}
         >
           bmthd/links
         </a>
@@ -59,5 +59,5 @@ export default async function HomePage() {
 }
 
 export const getConfig = async () => {
-  return { render: 'static' } as const;
+  return { render: "static" } as const;
 };
