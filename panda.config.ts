@@ -14,9 +14,9 @@ const globalCss = defineGlobalStyles({
   // attribute is removed. The background (no `data-fade` marker) is
   // unaffected and stays visible throughout, so the page is never a blank
   // white/blank screen. `--font-fade-duration` defaults to a real fade but
-  // is forced to `0s` by the script when the font resolves near-instantly
-  // (e.g. warm HTTP cache without the localStorage skip flag), so a fast
-  // load never forces the full fade duration.
+  // is forced to `0s` by the script when the fonts resolve near-instantly
+  // (browser font cache hit), so a cached load never forces the full fade
+  // duration.
   "[data-fade]": {
     transition: "opacity var(--font-fade-duration, .4s) ease",
   },
@@ -29,6 +29,14 @@ const globalCss = defineGlobalStyles({
       transition: "none",
     },
   },
+  // Drop the UA cross-fade and stack the new snapshot on top so the theme
+  // toggle's clip-path reveal (theme-toggle.tsx) does all the visible work.
+  "::view-transition-old(root), ::view-transition-new(root)": {
+    animation: "none",
+    mixBlendMode: "normal",
+  },
+  "::view-transition-old(root)": { zIndex: 0 },
+  "::view-transition-new(root)": { zIndex: 1 },
   ".glass": {
     background: "rgba(255,255,255,.12)",
     // Written as raw kebab-case properties (prefix first, standard last) so
