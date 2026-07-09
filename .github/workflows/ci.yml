@@ -16,13 +16,6 @@ jobs:
       - run: pnpm install --frozen-lockfile
       - run: pnpm typecheck
       - run: pnpm test
-      - name: check (expected to fail until tidy PR lands)
-        run: |
-          if pnpm check; then
-            echo "::error::pnpm check passed but was expected to fail (tidy PR already applied?)"
-            exit 1
-          else
-            echo "pnpm check fails as expected (formatting debt documented; fixed in stacked tidy PR)"
-          fi
+      - run: pnpm check
       - run: pnpm build
       - run: pnpm check-build

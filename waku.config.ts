@@ -1,4 +1,4 @@
-import { defineConfig } from 'waku/config';
+import { defineConfig } from "waku/config";
 
 export default defineConfig({
   vite: {
@@ -47,7 +47,7 @@ export default defineConfig({
       // include safari16.4/ios16.4 today) because that default is bumped on
       // every Vite major release and would silently start dropping the
       // `-webkit-` fallback again once it moves past Safari 18.
-      cssTarget: ['chrome111', 'edge111', 'firefox114', 'safari15', 'ios15'],
+      cssTarget: ["chrome111", "edge111", "firefox114", "safari15", "ios15"],
     },
   },
 });

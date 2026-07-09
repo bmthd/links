@@ -33,16 +33,16 @@ litlink 風の 1 ページ静的サイト。日本語のみ。想定読者は X 
 
 ## 技術スタック
 
-| 項目 | 選定 |
-|---|---|
-| フレームワーク | Waku(サーバーなし RSC、静的ビルド) |
-| スタイリング | Panda CSS(ゼロランタイム。RSC と互換) |
-| フォント | M PLUS Rounded 1c(400/700)。self-host して外部リクエストを避ける |
-| データ管理 | `src/links.ts` に型付き配列で集約。リンク追加 = 配列に 1 要素追加 |
-| ホスティング | Cloudflare Workers 静的アセット |
-| デプロイ | GitHub Actions: main への push で `wrangler deploy` |
-| リポジトリ | bmthd/links(新規・public) |
-| 公開 URL | https://links.bmth.dev/(DNS は Cloudflare 管理。Workers のカスタムドメインとして設定) |
+| 項目           | 選定                                                                                  |
+| -------------- | ------------------------------------------------------------------------------------- |
+| フレームワーク | Waku(サーバーなし RSC、静的ビルド)                                                    |
+| スタイリング   | Panda CSS(ゼロランタイム。RSC と互換)                                                 |
+| フォント       | M PLUS Rounded 1c(400/700)。self-host して外部リクエストを避ける                      |
+| データ管理     | `src/links.ts` に型付き配列で集約。リンク追加 = 配列に 1 要素追加                     |
+| ホスティング   | Cloudflare Workers 静的アセット                                                       |
+| デプロイ       | GitHub Actions: main への push で `wrangler deploy`                                   |
+| リポジトリ     | bmthd/links(新規・public)                                                             |
+| 公開 URL       | https://links.bmth.dev/(DNS は Cloudflare 管理。Workers のカスタムドメインとして設定) |
 
 ## ビジュアルデザイン(ビジュアルコンパニオンで確定)
 

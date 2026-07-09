@@ -1,30 +1,30 @@
-import { describe, expect, it } from 'vitest';
-import { profile, sections } from './links';
+import { describe, expect, it } from "vitest";
+import { profile, sections } from "./links";
 
 const allItems = sections.flatMap((s) => s.items);
 
-describe('profile', () => {
-  it('名前・bio・アバターが仕様どおり', () => {
-    expect(profile.name).toBe('じょうげん');
-    expect(profile.bio).toBe('フルスタック趣味人');
-    expect(profile.avatar).toBe('/avatar.png');
+describe("profile", () => {
+  it("名前・bio・アバターが仕様どおり", () => {
+    expect(profile.name).toBe("じょうげん");
+    expect(profile.bio).toBe("フルスタック趣味人");
+    expect(profile.avatar).toBe("/avatar.png");
   });
 });
 
-describe('sections', () => {
-  it('SNS(見出しなし)→ WORKS → DOUJINSHI の3セクション', () => {
-    expect(sections.map((s) => s.heading)).toEqual([undefined, 'WORKS', 'DOUJINSHI']);
+describe("sections", () => {
+  it("SNS(見出しなし)→ WORKS → DOUJINSHI の3セクション", () => {
+    expect(sections.map((s) => s.heading)).toEqual([undefined, "WORKS", "DOUJINSHI"]);
     expect(sections.map((s) => s.items.length)).toEqual([4, 2, 2]);
   });
 
-  it('全URLが有効な https で重複なし', () => {
+  it("全URLが有効な https で重複なし", () => {
     for (const { url } of allItems) {
-      expect(new URL(url).protocol).toBe('https:');
+      expect(new URL(url).protocol).toBe("https:");
     }
     expect(new Set(allItems.map((i) => i.url)).size).toBe(allItems.length);
   });
 
-  it('ラベルが空でなく重複なし', () => {
+  it("ラベルが空でなく重複なし", () => {
     for (const { label } of allItems) {
       expect(label.trim().length).toBeGreaterThan(0);
     }
