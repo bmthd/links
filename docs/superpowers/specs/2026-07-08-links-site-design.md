@@ -28,7 +28,7 @@ litlink 風の 1 ページ静的サイト。日本語のみ。想定読者は X 
    - メロンブックス — `https://www.melonbooks.co.jp/circle/index.php?circle_id=107344`
 
 - 全リンクは `target="_blank" rel="noopener"`。
-- フッターなし。
+- フッター: ページ最下部に「Made by じょうげん」+ リポジトリ(github.com/bmthd/links)へのリンク(2026-07-09 ユーザー要望で追加)。
 - リンク生存確認は 2026-07-07 に全 URL で実施済み。
 
 ## 技術スタック
@@ -61,7 +61,8 @@ litlink 風の 1 ページ静的サイト。日本語のみ。想定読者は X 
   - 外側シャドウ: `0 8px 24px rgba(0,0,0,.25)`
 - **ボタン**: ピル型(`border-radius: 999px`)、テキスト中央揃え・アイコンなし、白文字 + 薄いテキストシャドウ。ホバーで scale 1.03 程度 + ガラスがわずかに明るくなる
 - **セクション見出し**: 英字小ラベル(`WORKS` / `DOUJINSHI`)、中央揃え、letter-spacing 約 .25em、淡いブルー(ダーク時 #BFE8FF 相当)。区切り線・カード囲みなし
-- **カラーモード**: `prefers-color-scheme` 追従。ダークが基準。ライト時: 背景 `linear-gradient(160deg,#BFE0FF,#DCEEFF,#F4FAFF)`、ボタン `rgba(255,255,255,.45)` + 濃紺文字
+- **カラーモード**: `[data-theme]` ベース + 右上のトグルボタンで切替(2026-07-09 ユーザー要望で `prefers-color-scheme` 追従から変更)。初期値は localStorage → OS設定の順、FOUC防止の同期スクリプトで適用。ダークが基準。ライト時: 背景 `linear-gradient(160deg,#BFE0FF,#DCEEFF,#F4FAFF)`、ボタン `rgba(255,255,255,.45)` + 濃紺文字(#0F2A4A)
+- **ブロブ実装値**: blur 16px、移動量 ±28〜40px(blur 90px では動きが知覚できなかったため 2026-07-09 にモック準拠へ調整)
 
 ## メタ情報
 
@@ -82,7 +83,6 @@ litlink 風の 1 ページ静的サイト。日本語のみ。想定読者は X 
 - 英語版
 - Zenn 記事一覧などの動的取得
 - 同人誌既刊の個別掲載(ショップリンク 2 つのみ)
-- フッター
 - 旧 portfolio.bmth.dev のリダイレクト設定(旧サイトは当面そのまま)
 
 ## 運用メモ
