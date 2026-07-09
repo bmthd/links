@@ -8,6 +8,14 @@ const globalCss = defineGlobalStyles({
     backgroundGradient: "page",
     backgroundAttachment: "fixed",
   },
+  // Drop the UA cross-fade and stack the new snapshot on top so the theme
+  // toggle's clip-path reveal (theme-toggle.tsx) does all the visible work.
+  "::view-transition-old(root), ::view-transition-new(root)": {
+    animation: "none",
+    mixBlendMode: "normal",
+  },
+  "::view-transition-old(root)": { zIndex: 0 },
+  "::view-transition-new(root)": { zIndex: 1 },
   ".glass": {
     background: "rgba(255,255,255,.12)",
     // Written as raw kebab-case properties (prefix first, standard last) so

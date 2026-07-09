@@ -7,11 +7,46 @@ import { css, cx } from "../styled-system/css";
 // inline script in _root.tsx). The icon is switched purely in CSS from that
 // attribute, so the server-rendered markup never depends on the theme and
 // there is no hydration mismatch.
-function toggleTheme() {
+function applyTheme(next: "light" | "dark") {
+  document.documentElement.dataset.theme = next;
+  localStorage.setItem("theme", next);
+}
+
+// Reveals the incoming theme with a clip-path circle growing from the button,
+// falling back to an instant swap without View Transitions or under reduced motion.
+function toggleTheme(event: React.MouseEvent<HTMLButtonElement>) {
   const root = document.documentElement;
   const next = root.dataset.theme === "light" ? "dark" : "light";
-  root.dataset.theme = next;
-  localStorage.setItem("theme", next);
+
+  const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  if (!document.startViewTransition || prefersReducedMotion) {
+    applyTheme(next);
+    return;
+  }
+
+  // Center on the button so keyboard activation (clientX/Y 0,0) reveals too.
+  const rect = event.currentTarget.getBoundingClientRect();
+  const x = rect.left + rect.width / 2;
+  const y = rect.top + rect.height / 2;
+  const endRadius = Math.hypot(
+    Math.max(x, window.innerWidth - x),
+    Math.max(y, window.innerHeight - y),
+  );
+
+  const transition = document.startViewTransition(() => applyTheme(next));
+  transition.ready.then(() => {
+    root.animate(
+      {
+        clipPath: [`circle(0px at ${x}px ${y}px)`, `circle(${endRadius}px at ${x}px ${y}px)`],
+      },
+      {
+        duration: 550,
+        easing: "cubic-bezier(0.4, 0, 0.2, 1)",
+        pseudoElement: "::view-transition-new(root)",
+      },
+    );
+  });
 }
 
 export function ThemeToggle() {
