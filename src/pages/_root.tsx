@@ -13,12 +13,66 @@ import { ErrorBoundary } from "waku/router/client";
 const THEME_INIT_SCRIPT =
   "document.documentElement.dataset.theme=localStorage.getItem('theme')??(matchMedia('(prefers-color-scheme: light)').matches?'light':'dark')";
 
+// Prevents FOUT (M PLUS Rounded 1c is self-hosted via @fontsource and loads
+// after first paint): text content — anything marked `data-fade` (see
+// index.tsx / theme-toggle.tsx) — is hidden until the 400/700 weights used on
+// the page have loaded, then fades in via CSS (`[data-fonts="loading"]
+// [data-fade]` in panda.config.ts's globalCss). The background stays visible
+// throughout since it has no `data-fade` marker.
+//
+// This only hides anything while JS is running: the `data-fonts="loading"`
+// attribute is set here, synchronously, before first paint (same FOUC-
+// prevention pattern as the theme script above), and CSS only reacts to that
+// attribute. With JS disabled the attribute is never set, so the CSS default
+// (visible) applies and content is never hidden — deliberately not doing
+// "CSS hides by default, JS reveals", which would leave content invisible
+// forever without JS.
+//
+// Repeat visitors skip the hide+fade entirely: once a font load completes,
+// a localStorage flag is set, and subsequent visits return early before
+// touching `data-fonts` at all. This is a heuristic (it doesn't guarantee
+// the font is still cached), not a precise cache check — precise cache
+// detection isn't reliably available this early anyway, since the
+// @fontsource `@font-face` rules (declared in the stylesheet imported by
+// _layout.tsx) may not be registered in `document.fonts` yet when this
+// script runs, so `document.fonts.check()` could wrongly report `false`
+// even for a cached font. `document.fonts.load()` is used instead to kick
+// off loading (or resolve immediately if already available), chained into
+// `document.fonts.ready` as the actual completion signal, which correctly
+// waits for the real glyph subsets the page's Japanese text needs
+// regardless of registration timing.
+//
+// If loading is somehow already complete (or resolves) within ~100ms of
+// starting — e.g. a warm HTTP cache without the localStorage flag (cleared
+// separately) — the fade transition is skipped (`--font-fade-duration` set
+// to 0s) so a fast, already-cached load never forces the full fade
+// duration; a slow/failed load still gets the fade and is capped at 2.5s by
+// `Promise.race` so content is never hidden indefinitely.
+const FONT_FADE_INIT_SCRIPT = `(function(){
+  try{if(localStorage.getItem('fontsLoaded')==='1')return}catch(e){}
+  if(!('fonts' in document))return;
+  var html=document.documentElement,start=Date.now();
+  html.dataset.fonts='loading';
+  function reveal(){
+    if(Date.now()-start<100)html.style.setProperty('--font-fade-duration','0s');
+    delete html.dataset.fonts;
+    try{localStorage.setItem('fontsLoaded','1')}catch(e){}
+  }
+  var loaded=Promise.all([
+    document.fonts.load('400 1em "M PLUS Rounded 1c"'),
+    document.fonts.load('700 1em "M PLUS Rounded 1c"')
+  ]).catch(function(){}).then(function(){return document.fonts.ready});
+  var timeout=new Promise(function(resolve){setTimeout(resolve,2500)});
+  Promise.race([loaded,timeout]).then(reveal);
+})();`;
+
 export default function Root({ children }: { children: ReactNode }) {
   return (
     <ErrorBoundary>
       <html lang="ja" suppressHydrationWarning>
         <head>
           <script dangerouslySetInnerHTML={{ __html: THEME_INIT_SCRIPT }} />
+          <script dangerouslySetInnerHTML={{ __html: FONT_FADE_INIT_SCRIPT }} />
         </head>
         <body>{children}</body>
       </html>

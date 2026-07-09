@@ -8,6 +8,27 @@ const globalCss = defineGlobalStyles({
     backgroundGradient: "page",
     backgroundAttachment: "fixed",
   },
+  // FOUT fade-in (see FONT_FADE_INIT_SCRIPT in src/pages/_root.tsx): elements
+  // marked `data-fade` (main / footer / the theme toggle button) are hidden
+  // while `<html data-fonts="loading">` and fade to visible once that
+  // attribute is removed. The background (no `data-fade` marker) is
+  // unaffected and stays visible throughout, so the page is never a blank
+  // white/blank screen. `--font-fade-duration` defaults to a real fade but
+  // is forced to `0s` by the script when the font resolves near-instantly
+  // (e.g. warm HTTP cache without the localStorage skip flag), so a fast
+  // load never forces the full fade duration.
+  "[data-fade]": {
+    transition: "opacity var(--font-fade-duration, .4s) ease",
+  },
+  '[data-fonts="loading"] [data-fade]': {
+    opacity: 0,
+    pointerEvents: "none",
+  },
+  "@media (prefers-reduced-motion: reduce)": {
+    "[data-fade]": {
+      transition: "none",
+    },
+  },
   ".glass": {
     background: "rgba(255,255,255,.12)",
     // Written as raw kebab-case properties (prefix first, standard last) so

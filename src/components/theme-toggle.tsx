@@ -19,6 +19,7 @@ export function ThemeToggle() {
     <button
       type="button"
       aria-label="テーマ切り替え"
+      data-fade
       onClick={toggleTheme}
       className={cx(
         "glass",
