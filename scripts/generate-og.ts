@@ -5,22 +5,38 @@
 // Fonts come from @fontsource/m-plus-rounded-1c already in node_modules
 // (satori accepts woff but not woff2), so nothing is committed to the repo
 // and no network access is needed during build.
+//
+// Runs directly with `node scripts/generate-og.ts` (type stripping), so only
+// erasable TypeScript syntax is used.
 
 import { readFileSync, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { Resvg } from "@resvg/resvg-js";
+import type { ReactNode } from "react";
 import satori from "satori";
+
+// satori's non-JSX element form (element objects instead of JSX).
+type OgElement = {
+  readonly type: string;
+  readonly props: {
+    readonly style?: Record<string, string | number>;
+    readonly children?: OgElement | readonly OgElement[] | string;
+    readonly src?: string;
+    readonly width?: number;
+    readonly height?: number;
+  };
+};
 
 const root = join(dirname(fileURLToPath(import.meta.url)), "..");
 
 const fontDir = join(root, "node_modules/@fontsource/m-plus-rounded-1c/files");
-const font = (file) => readFileSync(join(fontDir, file));
+const font = (file: string): Buffer => readFileSync(join(fontDir, file));
 
 const avatar = `data:image/png;base64,${readFileSync(join(root, "public/avatar.png")).toString("base64")}`;
 
 // Soft light blob rendered as a radial gradient (satori has no filter: blur).
-const blob = (size, color, position) => ({
+const blob = (size: number, color: string, position: Record<string, number>): OgElement => ({
   type: "div",
   props: {
     style: {
@@ -34,7 +50,7 @@ const blob = (size, color, position) => ({
   },
 });
 
-const element = {
+const element: OgElement = {
   type: "div",
   props: {
     style: {
@@ -134,7 +150,7 @@ const element = {
   },
 };
 
-const svg = await satori(element, {
+const svg = await satori(element as unknown as ReactNode, {
   width: 1200,
   height: 630,
   // The japanese subset also covers basic latin, so it is the only subset

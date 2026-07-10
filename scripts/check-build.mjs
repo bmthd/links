@@ -28,7 +28,7 @@ if (missing.length > 0) {
   process.exit(1);
 }
 
-// scripts/generate-og.mjs(build の前段)が生成した OGP 画像が配信物に含まれること
+// scripts/generate-og.ts(build の前段)が生成した OGP 画像が配信物に含まれること
 const ogSize = statSync("dist/public/og.png").size;
 if (ogSize === 0) {
   console.error("EMPTY: dist/public/og.png");

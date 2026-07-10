@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "waku dev",
-    "build": "node scripts/generate-og.mjs && waku build",
+    "build": "node scripts/generate-og.ts && waku build",
     "preview": "waku start",
     "typecheck": "tsc --noEmit",
     "test": "vp test run",
@@ -23,6 +23,7 @@
   "devDependencies": {
     "@pandacss/dev": "^1.11.4",
     "@resvg/resvg-js": "^2.6.2",
+    "@types/node": "^26.1.1",
     "@types/react": "^19.2.17",
     "@types/react-dom": "^19.2.3",
     "satori": "^0.26.0",
