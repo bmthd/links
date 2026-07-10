@@ -20,7 +20,6 @@ const here = fileURLToPath(new URL(".", import.meta.url));
 const distDir = join(here, "..", "..", "dist", "public");
 const outDir = join(here, "output");
 const prodUrl = process.env.PROD_URL ?? "https://links.bmth.dev/";
-const port = 4173;
 
 const mime = {
   ".html": "text/html; charset=utf-8",
@@ -39,7 +38,7 @@ const mime = {
 function serveDist() {
   const server = createServer(async (req, res) => {
     try {
-      const pathname = decodeURIComponent(new URL(req.url, `http://127.0.0.1:${port}`).pathname);
+      const pathname = decodeURIComponent(new URL(req.url, "http://127.0.0.1").pathname);
       let file = normalize(pathname).replace(/^([/\\]|\.\.)+/, "");
       if (file === "" || file.endsWith("/")) file += "index.html";
       let body;
@@ -56,28 +55,53 @@ function serveDist() {
       res.end("not found");
     }
   });
+  // 空きポートに任せる (固定ポートは中断残骸などと衝突し EADDRINUSE になる)
   return new Promise((resolve) => {
-    server.listen(port, "127.0.0.1", () => resolve(server));
+    server.listen(0, "127.0.0.1", () => resolve(server));
   });
 }
 
 async function capture(browser, url, theme) {
+  // "HeadlessChrome" を含む既定 UA は Cloudflare の bot 判定に引っかかり得る
+  // ため、同バージョンの通常 Chrome 相当へ揃える (PR/本番の両方に適用)。
+  const major = browser.version().split(".")[0];
   const context = await browser.newContext({
     viewport: { width: 375, height: 812 },
     deviceScaleFactor: 1,
     reducedMotion: "reduce",
     colorScheme: theme,
+    userAgent: `Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/${major}.0.0.0 Safari/537.36`,
   });
-  await context.addInitScript((t) => localStorage.setItem("theme", t), theme);
-  const page = await context.newPage();
-  await page.goto(url, { waitUntil: "networkidle" });
-  await page.evaluate(() => document.fonts.ready);
-  await page.waitForFunction(() => !document.documentElement.hasAttribute("data-fonts"));
-  // フェード完了後の描画安定待ち (reduced-motion で transition は無効だが念のため)
-  await page.waitForTimeout(500);
-  const buffer = await page.screenshot({ fullPage: true });
-  await context.close();
-  return PNG.sync.read(buffer);
+  try {
+    await context.addInitScript((t) => localStorage.setItem("theme", t), theme);
+    const page = await context.newPage();
+    // `networkidle` は CI ランナーから本番 (Cloudflare) を開くとタイムアウト
+    // することがあるため使わない。`load` + ページ本体の selector と
+    // フォント読込完了の明示的な待機で描画の安定を担保する。
+    await page.goto(url, { waitUntil: "load", timeout: 60_000 });
+    await page.waitForSelector("main[data-fade]", { timeout: 30_000 });
+    await page.evaluate(() => document.fonts.ready);
+    await page.waitForFunction(() => !document.documentElement.hasAttribute("data-fonts"));
+    // フェード完了後の描画安定待ち (reduced-motion で transition は無効だが念のため)
+    await page.waitForTimeout(500);
+    const buffer = await page.screenshot({ fullPage: true });
+    return PNG.sync.read(buffer);
+  } finally {
+    await context.close();
+  }
+}
+
+async function captureWithRetry(browser, url, theme, attempts = 3) {
+  let lastError;
+  for (let attempt = 1; attempt <= attempts; attempt++) {
+    try {
+      return await capture(browser, url, theme);
+    } catch (error) {
+      lastError = error;
+      console.warn(`capture failed (${url}, ${theme}, attempt ${attempt}/${attempts}): ${error}`);
+    }
+  }
+  throw lastError;
 }
 
 function padTo(png, width, height) {
@@ -90,12 +114,13 @@ function padTo(png, width, height) {
 async function main() {
   await mkdir(outDir, { recursive: true });
   const server = await serveDist();
+  const localUrl = `http://127.0.0.1:${server.address().port}/`;
   const browser = await chromium.launch();
   const results = {};
 
   for (const theme of ["dark", "light"]) {
-    const pr = await capture(browser, `http://127.0.0.1:${port}/`, theme);
-    const prod = await capture(browser, prodUrl, theme);
+    const pr = await captureWithRetry(browser, localUrl, theme);
+    const prod = await captureWithRetry(browser, prodUrl, theme);
     const width = Math.max(pr.width, prod.width);
     const height = Math.max(pr.height, prod.height);
     const prPadded = padTo(pr, width, height);
