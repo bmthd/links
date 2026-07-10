@@ -1,5 +1,18 @@
 import type { ReactNode } from "react";
 import { ErrorBoundary } from "waku/router/client";
+import mplusJapanese400 from "@fontsource/m-plus-rounded-1c/files/m-plus-rounded-1c-japanese-400-normal.woff2?url";
+import mplusJapanese700 from "@fontsource/m-plus-rounded-1c/files/m-plus-rounded-1c-japanese-700-normal.woff2?url";
+import mplusLatin400 from "@fontsource/m-plus-rounded-1c/files/m-plus-rounded-1c-latin-400-normal.woff2?url";
+import mplusLatin700 from "@fontsource/m-plus-rounded-1c/files/m-plus-rounded-1c-latin-700-normal.woff2?url";
+
+// The four woff2 files behind the subset CSS imported in _layout.tsx (see
+// the comment there). Preloaded below so the downloads start at HTML parse
+// time instead of after the stylesheet is fetched and matched — these gate
+// the `data-fade` reveal (FONT_FADE_INIT_SCRIPT), so starting them one
+// round-trip earlier directly shortens the hidden period. `?url` imports
+// resolve to the same content-hashed /assets/ paths the built CSS
+// references, so each preload is a cache hit for the CSS-initiated request.
+const PRELOAD_FONTS = [mplusJapanese400, mplusJapanese700, mplusLatin400, mplusLatin700];
 
 // Waku's built-in default root renders `<html>` without a `lang` attribute
 // (see `DefaultRoot` in `waku/router/create-pages.js`). This file overrides
@@ -72,6 +85,16 @@ export default function Root({ children }: { children: ReactNode }) {
         <head>
           <script dangerouslySetInnerHTML={{ __html: THEME_INIT_SCRIPT }} />
           <script dangerouslySetInnerHTML={{ __html: FONT_FADE_INIT_SCRIPT }} />
+          {/*
+            React 19 hoists these resource links and Waku's SSG additionally
+            keeps the literal elements, so each preload appears twice in the
+            built HTML. Browsers dedupe preloads by href (one request per
+            font), so this is cosmetic; `ReactDOM.preload()` would avoid it
+            but is silently dropped by Waku beta's RSC->HTML pipeline.
+          */}
+          {PRELOAD_FONTS.map((href) => (
+            <link key={href} rel="preload" as="font" type="font/woff2" href={href} crossOrigin="" />
+          ))}
         </head>
         <body>{children}</body>
       </html>
