@@ -1,11 +1,12 @@
-// リンク切れ監視スクリプト
+// リンク切れ監視スクリプト(node scripts/check-links.ts で実行)
+//
+// Node 24 は型ストリップにより .ts を直接実行できるため、tsx 等の追加依存は不要。
+// erasable でない構文(enum / namespace / パラメータプロパティ等)は使わない。
 //
 // URL抽出方式:
-//   1. tsx 等の追加依存を増やさないため、まず `src/lib/links.ts` を素の ESM import で
-//      読み込む。Node は v22.6 以降 `--experimental-strip-types` で、v23.6 以降は
-//      デフォルトで .ts の型ストリップに対応しているため、通常はこの経路で
-//      `sections` を直接取得できる(Node 24 のローカル検証済み)。
-//   2. 万一 import が失敗した場合(古い Node 等で型ストリップが使えない場合)は、
+//   1. まず `src/lib/links.ts` を動的 import で読み込み、`sections` から全URLを取得する
+//      (tsc の moduleResolution 制約を避けるため URL 経由の動的 import を使用)。
+//   2. 万一 import が失敗した場合(型ストリップ非対応の古い Node 等)は、
 //      links.ts をテキストとして読み込み `label: "..."` / `url: "..."` のペアを
 //      正規表現で抽出するフォールバックに切り替える。
 //
@@ -21,7 +22,24 @@
 //     1件でもあれば結果表を出力したうえで exit 1。
 
 import { readFileSync } from "node:fs";
+import process from "node:process";
 import { fileURLToPath } from "node:url";
+
+type Target = { label: string; url: string };
+type Method = "HEAD" | "GET";
+type FetchResult = { ok: true; status: number } | { ok: false; error: string };
+type Judgement = "OK" | "OK(bot対策疑い)" | "NG";
+type CheckResult = {
+  label: string;
+  url: string;
+  method: Method;
+  status: number | "-";
+  judgement: Judgement;
+  note: string;
+};
+type LinksModule = {
+  sections: readonly { items: readonly Target[] }[];
+};
 
 const LINKS_TS_URL = new URL("../src/lib/links.ts", import.meta.url);
 const SELF_URL = "https://links.bmth.dev/";
@@ -29,23 +47,32 @@ const TIMEOUT_MS = 15_000;
 const USER_AGENT =
   "Mozilla/5.0 (compatible; links-bmth-dev-linkcheck/1.0; +https://links.bmth.dev/)";
 
-/** @returns {Promise<{ label: string, url: string }[]>} */
-const collectTargets = async () => {
-  /** @type {{ label: string, url: string }[]} */
-  let targets;
+const errorMessage = (err: unknown): string => {
+  if (err instanceof Error) {
+    const cause = err.cause instanceof Error ? ` (${err.cause.message})` : "";
+    return err.message + cause;
+  }
+  return String(err);
+};
+
+const collectTargets = async (): Promise<Target[]> => {
+  let targets: Target[];
   try {
-    const mod = await import(LINKS_TS_URL.href);
+    const mod = (await import(LINKS_TS_URL.href)) as LinksModule;
     targets = mod.sections.flatMap((section) =>
       section.items.map((item) => ({ label: item.label, url: item.url })),
     );
     if (targets.length === 0) throw new Error("sections is empty");
   } catch (err) {
     console.warn(
-      `[warn] links.ts の import に失敗したため正規表現フォールバックで抽出します: ${err.message}`,
+      `[warn] links.ts の import に失敗したため正規表現フォールバックで抽出します: ${errorMessage(err)}`,
     );
     const src = readFileSync(fileURLToPath(LINKS_TS_URL), "utf8");
     const labelUrlRe = /label:\s*"([^"]+)"\s*,\s*url:\s*"(https?:\/\/[^"]+)"/gs;
-    targets = [...src.matchAll(labelUrlRe)].map((m) => ({ label: m[1], url: m[2] }));
+    targets = [...src.matchAll(labelUrlRe)].map((m) => ({
+      label: m[1] ?? "",
+      url: m[2] ?? "",
+    }));
     if (targets.length === 0) {
       throw new Error("正規表現フォールバックでも URL を抽出できませんでした");
     }
@@ -54,12 +81,7 @@ const collectTargets = async () => {
   return targets;
 };
 
-/**
- * @param {string} url
- * @param {"HEAD" | "GET"} method
- * @returns {Promise<{ ok: true, status: number } | { ok: false, error: string }>}
- */
-const attemptFetch = async (url, method) => {
+const attemptFetch = async (url: string, method: Method): Promise<FetchResult> => {
   try {
     const res = await fetch(url, {
       method,
@@ -69,15 +91,12 @@ const attemptFetch = async (url, method) => {
     });
     return { ok: true, status: res.status };
   } catch (err) {
-    const cause =
-      err instanceof Error && err.cause instanceof Error ? ` (${err.cause.message})` : "";
-    return { ok: false, error: (err instanceof Error ? err.message : String(err)) + cause };
+    return { ok: false, error: errorMessage(err) };
   }
 };
 
-/** @param {{ label: string, url: string }} target */
-const checkTarget = async ({ label, url }) => {
-  let method = "HEAD";
+const checkTarget = async ({ label, url }: Target): Promise<CheckResult> => {
+  let method: Method = "HEAD";
   let result = await attemptFetch(url, method);
 
   if (!result.ok || result.status === 405 || result.status === 501) {

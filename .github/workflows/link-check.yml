@@ -23,7 +23,7 @@ jobs:
         id: check
         run: |
           set +e
-          node scripts/check-links.mjs | tee link-check-result.txt
+          node scripts/check-links.ts | tee link-check-result.txt
           exit_code=${PIPESTATUS[0]}
           set -e
           {
