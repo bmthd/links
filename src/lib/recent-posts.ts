@@ -13,9 +13,12 @@ const FEEDS: readonly { url: string; source: RecentPostSource }[] = [
   { url: "https://blog.bmth.dev/feed", source: "Blog" },
 ];
 
-// The blog runs on a 1GB-RAM WordPress box that can be slow on a cold hit,
-// so give it a generous timeout and one retry before giving up.
-const FETCH_TIMEOUT_MS = 15_000;
+// The blog runs on a 1GB-RAM WordPress box that has been measured taking
+// ~20s to serve /feed under load, so give it a generous timeout and one
+// retry before giving up. Worst case this adds ~1 minute to the (daily,
+// scheduled) static build, which is acceptable; the Zenn fetch runs in
+// parallel and is unaffected.
+const FETCH_TIMEOUT_MS = 30_000;
 const FETCH_ATTEMPTS = 2;
 
 const ITEM_RE = /<item>([\s\S]*?)<\/item>/g;
