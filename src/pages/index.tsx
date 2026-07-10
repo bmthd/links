@@ -15,8 +15,10 @@ export default async function HomePage() {
       <meta property="og:title" content="じょうげん | links" />
       <meta property="og:description" content={DESCRIPTION} />
       <meta property="og:url" content="https://links.bmth.dev/" />
-      <meta property="og:image" content="https://links.bmth.dev/avatar.png" />
-      <meta name="twitter:card" content="summary" />
+      <meta property="og:image" content="https://links.bmth.dev/og.png" />
+      <meta property="og:image:width" content="1200" />
+      <meta property="og:image:height" content="630" />
+      <meta name="twitter:card" content="summary_large_image" />
       <link rel="icon" href="/avatar.png" />
       <Background />
       <ThemeToggle />
