@@ -2,6 +2,9 @@ name: Deploy
 on:
   push:
     branches: [main]
+  # 毎日 06:00 JST に再ビルドして RECENT POSTS(ビルド時RSS取得)を更新する
+  schedule:
+    - cron: "0 21 * * *"
 jobs:
   deploy:
     runs-on: ubuntu-latest

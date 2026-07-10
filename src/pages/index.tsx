@@ -2,6 +2,7 @@ import { css } from "../styled-system/css";
 import { Background } from "../components/background";
 import { ProfileCard } from "../components/profile-card";
 import { LinkSectionBlock } from "../components/link-section";
+import { RecentPosts } from "../components/recent-posts";
 import { ThemeToggle } from "../components/theme-toggle";
 import { sections } from "../lib/links";
 
@@ -36,6 +37,7 @@ export default async function HomePage() {
         {sections.map((section, i) => (
           <LinkSectionBlock key={section.heading ?? i} section={section} />
         ))}
+        <RecentPosts />
       </main>
       <footer
         data-fade
