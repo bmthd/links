@@ -1,6 +1,10 @@
 // PR ビルド (dist/public) と本番 (https://links.bmth.dev/) を同条件で撮影し、
 // pixelmatch で差分画像と差分率を output/ に書き出す。
 //
+// Node 24 の type stripping で `node .github/visual-diff/run.ts` として直接
+// 実行するため、erasable でない TS 構文 (enum / namespace / parameter
+// properties など) は使わない。
+//
 // 撮影ノイズ対策:
 // - `reducedMotion: "reduce"` でブロブアニメーション・transition を停止
 //   (background.tsx / panda.config.ts の `_motionReduce` が反応する)
@@ -8,20 +12,29 @@
 //   (_root.tsx の THEME_INIT_SCRIPT が first paint 前に読む)
 // - フォントフェード (data-fonts) は `document.fonts.ready` +
 //   `<html data-fonts>` の消滅を明示的に待つ
-import { createServer } from "node:http";
+import { createServer, type Server } from "node:http";
 import { readFile, mkdir, writeFile } from "node:fs/promises";
+import type { AddressInfo } from "node:net";
 import { extname, join, normalize } from "node:path";
 import { fileURLToPath } from "node:url";
-import { chromium } from "playwright";
+import { chromium, type Browser } from "playwright";
 import pixelmatch from "pixelmatch";
 import { PNG } from "pngjs";
+
+type Theme = "dark" | "light";
+
+interface DiffResult {
+  diffPixels: number;
+  totalPixels: number;
+  ratio: number;
+}
 
 const here = fileURLToPath(new URL(".", import.meta.url));
 const distDir = join(here, "..", "..", "dist", "public");
 const outDir = join(here, "output");
 const prodUrl = process.env.PROD_URL ?? "https://links.bmth.dev/";
 
-const mime = {
+const mime: Record<string, string> = {
   ".html": "text/html; charset=utf-8",
   ".css": "text/css",
   ".js": "text/javascript",
@@ -35,13 +48,13 @@ const mime = {
   ".txt": "text/plain; charset=utf-8",
 };
 
-function serveDist() {
+function serveDist(): Promise<Server> {
   const server = createServer(async (req, res) => {
     try {
-      const pathname = decodeURIComponent(new URL(req.url, "http://127.0.0.1").pathname);
+      const pathname = decodeURIComponent(new URL(req.url ?? "/", "http://127.0.0.1").pathname);
       let file = normalize(pathname).replace(/^([/\\]|\.\.)+/, "");
       if (file === "" || file.endsWith("/")) file += "index.html";
-      let body;
+      let body: Buffer;
       try {
         body = await readFile(join(distDir, file));
       } catch {
@@ -61,7 +74,7 @@ function serveDist() {
   });
 }
 
-async function capture(browser, url, theme) {
+async function capture(browser: Browser, url: string, theme: Theme): Promise<PNG> {
   // "HeadlessChrome" を含む既定 UA は Cloudflare の bot 判定に引っかかり得る
   // ため、同バージョンの通常 Chrome 相当へ揃える (PR/本番の両方に適用)。
   const major = browser.version().split(".")[0];
@@ -73,7 +86,7 @@ async function capture(browser, url, theme) {
     userAgent: `Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/${major}.0.0.0 Safari/537.36`,
   });
   try {
-    await context.addInitScript((t) => localStorage.setItem("theme", t), theme);
+    await context.addInitScript((t: string) => localStorage.setItem("theme", t), theme);
     const page = await context.newPage();
     // `networkidle` は CI ランナーから本番 (Cloudflare) を開くとタイムアウト
     // することがあるため使わない。`load` + ページ本体の selector と
@@ -91,8 +104,13 @@ async function capture(browser, url, theme) {
   }
 }
 
-async function captureWithRetry(browser, url, theme, attempts = 3) {
-  let lastError;
+async function captureWithRetry(
+  browser: Browser,
+  url: string,
+  theme: Theme,
+  attempts = 3,
+): Promise<PNG> {
+  let lastError: unknown;
   for (let attempt = 1; attempt <= attempts; attempt++) {
     try {
       return await capture(browser, url, theme);
@@ -104,21 +122,21 @@ async function captureWithRetry(browser, url, theme, attempts = 3) {
   throw lastError;
 }
 
-function padTo(png, width, height) {
+function padTo(png: PNG, width: number, height: number): PNG {
   if (png.width === width && png.height === height) return png;
   const padded = new PNG({ width, height });
   PNG.bitblt(png, padded, 0, 0, png.width, png.height, 0, 0);
   return padded;
 }
 
-async function main() {
+async function main(): Promise<void> {
   await mkdir(outDir, { recursive: true });
   const server = await serveDist();
-  const localUrl = `http://127.0.0.1:${server.address().port}/`;
+  const localUrl = `http://127.0.0.1:${(server.address() as AddressInfo).port}/`;
   const browser = await chromium.launch();
-  const results = {};
+  const results: Record<string, DiffResult> = {};
 
-  for (const theme of ["dark", "light"]) {
+  for (const theme of ["dark", "light"] as const) {
     const pr = await captureWithRetry(browser, localUrl, theme);
     const prod = await captureWithRetry(browser, prodUrl, theme);
     const width = Math.max(pr.width, prod.width);

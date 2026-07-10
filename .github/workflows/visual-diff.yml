@@ -27,7 +27,7 @@ jobs:
         run: npx playwright install --with-deps chromium
         working-directory: .github/visual-diff
       - name: Capture and compare screenshots
-        run: node .github/visual-diff/run.mjs
+        run: node .github/visual-diff/run.ts
         env:
           PROD_URL: https://links.bmth.dev/
       - name: Upload screenshots
