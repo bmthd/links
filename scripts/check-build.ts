@@ -2,7 +2,7 @@ import { readFileSync, statSync } from "node:fs";
 
 const html = readFileSync("dist/public/index.html", "utf8");
 
-const required = [
+const required: string[] = [
   'lang="ja"',
   "じょうげん",
   "フルスタック趣味人",

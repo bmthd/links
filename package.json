@@ -10,7 +10,7 @@
     "typecheck": "tsc --noEmit",
     "test": "vp test run",
     "check": "vp check",
-    "check-build": "node scripts/check-build.mjs",
+    "check-build": "node scripts/check-build.ts",
     "prepare": "panda codegen"
   },
   "dependencies": {
