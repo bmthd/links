@@ -5,3 +5,5 @@ src/pages.gen.ts
 .wrangler/
 *.log
 .playwright-cli/
+# scripts/generate-og.mjs がビルド時に生成する
+public/og.png
