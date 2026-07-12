@@ -1,6 +1,17 @@
 name: Visual Diff
 on:
   pull_request:
+    paths:
+      - "src/**"
+      - "public/**"
+      - "scripts/**"
+      - "panda.config.ts"
+      - "waku.config.ts"
+      - "postcss.config.cjs"
+      - "package.json"
+      - "pnpm-lock.yaml"
+      - ".github/workflows/visual-diff.yml"
+      - ".github/visual-diff/**"
 jobs:
   visual-diff:
     name: Visual Diff
@@ -11,13 +22,7 @@ jobs:
       pull-requests: write
     steps:
       - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7
-      - uses: pnpm/action-setup@0ebf47130e4866e96fce0953f49152a61190b271 # v6
-        with:
-          version: 11
-      - uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6
-        with:
-          node-version: 24
-          cache: pnpm
+      - uses: jdx/mise-action@c37c93293d6b742fc901e1406b8f764f6fb19dac # v2
       - run: pnpm install --frozen-lockfile
       - run: pnpm build
       - name: Install visual-diff dependencies
