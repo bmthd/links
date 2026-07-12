@@ -1,8 +1,8 @@
-import { readFileSync } from "node:fs";
+import { readFileSync, statSync } from "node:fs";
 
 const html = readFileSync("dist/public/index.html", "utf8");
 
-const required = [
+const required: string[] = [
   'lang="ja"',
   "じょうげん",
   "フルスタック趣味人",
@@ -17,6 +17,8 @@ const required = [
   "WORKS",
   "DOUJINSHI",
   "og:title",
+  "https://links.bmth.dev/og.png",
+  "summary_large_image",
   "/avatar.png",
 ];
 
@@ -25,4 +27,12 @@ if (missing.length > 0) {
   console.error("MISSING:", missing);
   process.exit(1);
 }
+
+// scripts/generate-og.ts(build の前段)が生成した OGP 画像が配信物に含まれること
+const ogSize = statSync("dist/public/og.png").size;
+if (ogSize === 0) {
+  console.error("EMPTY: dist/public/og.png");
+  process.exit(1);
+}
+
 console.log("OK: all required content present");
