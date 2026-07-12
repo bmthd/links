@@ -11,13 +11,7 @@ jobs:
       pull-requests: write
     steps:
       - uses: actions/checkout@v7
-      - uses: pnpm/action-setup@v6
-        with:
-          version: 11
-      - uses: actions/setup-node@v6
-        with:
-          node-version: 24
-          cache: pnpm
+      - uses: jdx/mise-action@v2
       - run: pnpm install --frozen-lockfile
       - run: pnpm build
       - name: Install visual-diff dependencies
