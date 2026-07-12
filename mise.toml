@@ -1,2 +1,5 @@
 [tools]
 node = "24.18.0"
+# GitHub Actions のバージョンをコミットSHAにピン留めするツール
+# https://github.com/suzuki-shunsuke/pinact
+pinact = "4.1.0"
