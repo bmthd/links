@@ -1,12 +1,32 @@
-export type RecentPostSource = "Zenn" | "Blog";
+import * as v from "valibot";
 
-export type RecentPost = {
-  readonly title: string;
-  readonly url: string;
-  /** ISO 8601 date string. */
-  readonly date: string;
-  readonly source: RecentPostSource;
-};
+export const RECENT_POST_SOURCES = ["Zenn", "Blog"] as const;
+
+/**
+ * Validation + normalization schema for a single feed item. XML extraction is
+ * done with regex below (valibot is a data-validation library, not an XML
+ * parser); this schema turns the loosely-typed regex captures into a
+ * `RecentPost`, coercing the RFC-822 `pubDate` into an ISO string and rejecting
+ * items whose fields are missing, blank, non-URL, or an unparsable date. A
+ * failed parse skips the item rather than throwing, keeping a partially broken
+ * feed usable.
+ */
+export const RecentPostSchema = v.object({
+  title: v.pipe(v.string(), v.trim(), v.nonEmpty()),
+  url: v.pipe(v.string(), v.trim(), v.url()),
+  date: v.pipe(
+    v.string(),
+    v.trim(),
+    v.transform((raw) => new Date(raw)),
+    v.check((d) => !Number.isNaN(d.getTime()), "invalid pubDate"),
+    v.transform((d) => d.toISOString()),
+  ),
+  source: v.picklist(RECENT_POST_SOURCES),
+});
+
+export type RecentPostSource = (typeof RECENT_POST_SOURCES)[number];
+
+export type RecentPost = v.InferOutput<typeof RecentPostSchema>;
 
 const FEEDS: readonly { url: string; source: RecentPostSource }[] = [
   { url: "https://zenn.dev/bmth/feed", source: "Zenn" },
@@ -27,23 +47,24 @@ const LINK_RE = /<link>([\s\S]*?)<\/link>/;
 const PUB_DATE_RE = /<pubDate>([\s\S]*?)<\/pubDate>/;
 
 /**
- * Minimal, dependency-free RSS 2.0 `<item>` parser. Only extracts the three
- * fields the UI needs (title / link / pubDate); items with malformed or
- * missing fields are skipped rather than thrown, so a partially broken feed
- * still yields whatever parsed cleanly.
+ * Minimal, dependency-light RSS 2.0 `<item>` parser. Regex pulls the three
+ * fields the UI needs (title / link / pubDate) out of each `<item>`, then
+ * `RecentPostSchema` validates and normalizes them; items that fail the schema
+ * (missing/blank field, non-URL link, unparsable date) are skipped rather than
+ * thrown, so a partially broken feed still yields whatever parsed cleanly.
  */
 export function parseFeed(xml: string, source: RecentPostSource): RecentPost[] {
   const posts: RecentPost[] = [];
   for (const match of xml.matchAll(ITEM_RE)) {
     const block = match[1] ?? "";
     const titleMatch = TITLE_RE.exec(block);
-    const title = (titleMatch?.[1] ?? titleMatch?.[2])?.trim();
-    const url = LINK_RE.exec(block)?.[1]?.trim();
-    const rawDate = PUB_DATE_RE.exec(block)?.[1]?.trim();
-    if (!title || !url || !rawDate) continue;
-    const date = new Date(rawDate);
-    if (Number.isNaN(date.getTime())) continue;
-    posts.push({ title, url, date: date.toISOString(), source });
+    const result = v.safeParse(RecentPostSchema, {
+      title: titleMatch?.[1] ?? titleMatch?.[2],
+      url: LINK_RE.exec(block)?.[1],
+      date: PUB_DATE_RE.exec(block)?.[1],
+      source,
+    });
+    if (result.success) posts.push(result.output);
   }
   return posts;
 }

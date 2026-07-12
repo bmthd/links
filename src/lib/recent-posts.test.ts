@@ -49,10 +49,12 @@ describe("parseFeed", () => {
     ]);
   });
 
-  it("必須フィールド欠落・不正日付のitemはスキップする", () => {
+  it("必須フィールド欠落・不正日付・非URLリンク・空タイトルのitemはスキップする", () => {
     const broken = `<rss><channel>
 <item><title>リンクなし</title><pubDate>Sat, 17 Jun 2023 14:13:13 +0000</pubDate></item>
 <item><title>日付不正</title><link>https://example.com/x</link><pubDate>not a date</pubDate></item>
+<item><title>非URLリンク</title><link>not-a-url</link><pubDate>Mon, 01 Jan 2024 00:00:00 +0000</pubDate></item>
+<item><title>   </title><link>https://example.com/blank</link><pubDate>Mon, 01 Jan 2024 00:00:00 +0000</pubDate></item>
 <item><title>正常</title><link>https://example.com/ok</link><pubDate>Mon, 01 Jan 2024 00:00:00 +0000</pubDate></item>
 </channel></rss>`;
     const posts = parseFeed(broken, "Blog");
