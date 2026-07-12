@@ -1,6 +1,17 @@
 name: Visual Diff
 on:
   pull_request:
+    paths:
+      - "src/**"
+      - "public/**"
+      - "scripts/**"
+      - "panda.config.ts"
+      - "waku.config.ts"
+      - "postcss.config.cjs"
+      - "package.json"
+      - "pnpm-lock.yaml"
+      - ".github/workflows/visual-diff.yml"
+      - ".github/visual-diff/**"
 jobs:
   visual-diff:
     name: Visual Diff
