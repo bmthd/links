@@ -5,5 +5,7 @@ src/pages.gen.ts
 .wrangler/
 *.log
 .playwright-cli/
+.github/visual-diff/output/
+.github/visual-diff/package-lock.json
 # scripts/generate-og.mjs がビルド時に生成する
 public/og.png

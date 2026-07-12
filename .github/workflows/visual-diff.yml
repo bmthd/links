@@ -1,0 +1,74 @@
+name: Visual Diff
+on:
+  pull_request:
+jobs:
+  visual-diff:
+    name: Visual Diff
+    if: github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@v7
+      - uses: pnpm/action-setup@v6
+        with:
+          version: 11
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 24
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm build
+      - name: Install visual-diff dependencies
+        run: npm install
+        working-directory: .github/visual-diff
+      - name: Install Chromium
+        run: npx playwright install --with-deps chromium
+        working-directory: .github/visual-diff
+      - name: Capture and compare screenshots
+        run: node .github/visual-diff/run.ts
+        env:
+          PROD_URL: https://links.bmth.dev/
+      - name: Upload screenshots
+        id: artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: visual-diff
+          path: .github/visual-diff/output
+      - name: Comment diff summary on PR
+        uses: actions/github-script@v9
+        env:
+          ARTIFACT_URL: ${{ steps.artifact.outputs.artifact-url }}
+        with:
+          script: |
+            const { readFileSync } = require('node:fs');
+            const marker = '<!-- visual-diff-report -->';
+            const results = JSON.parse(
+              readFileSync('.github/visual-diff/output/results.json', 'utf8'),
+            );
+            const rows = Object.entries(results)
+              .map(([theme, r]) => {
+                const pct = (r.ratio * 100).toFixed(2);
+                return `| ${theme} | ${pct}% | ${r.diffPixels.toLocaleString()} / ${r.totalPixels.toLocaleString()} px |`;
+              })
+              .join('\n');
+            const body = [
+              marker,
+              '## 📸 Visual Diff (本番 vs この PR)',
+              '',
+              '| テーマ | 差分率 | 差分ピクセル |',
+              '| --- | --- | --- |',
+              rows,
+              '',
+              `スクリーンショット (PR / 本番 / diff、375px幅・dark/light): [artifact をダウンロード](${process.env.ARTIFACT_URL})`,
+            ].join('\n');
+            const { owner, repo } = context.repo;
+            const issue_number = context.payload.pull_request.number;
+            const comments = await github.rest.issues.listComments({ owner, repo, issue_number });
+            const existing = comments.data.find((c) => c.body && c.body.includes(marker));
+            if (existing) {
+              await github.rest.issues.updateComment({ owner, repo, comment_id: existing.id, body });
+            } else {
+              await github.rest.issues.createComment({ owner, repo, issue_number, body });
+            }
