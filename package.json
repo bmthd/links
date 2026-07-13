@@ -11,7 +11,7 @@
     "test": "vp test run",
     "check": "vp check",
     "check-build": "node scripts/check-build.ts",
-    "prepare": "panda codegen"
+    "prepare": "panda codegen && vp config --no-agent"
   },
   "dependencies": {
     "@fontsource/m-plus-rounded-1c": "^5.2.10",
