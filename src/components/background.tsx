@@ -20,6 +20,10 @@ export function Background() {
         inset: 0,
         overflow: "hidden",
         zIndex: -1,
+        // The page gradient lives here — a fixed, viewport-sized layer —
+        // rather than on <body> with `background-attachment: fixed`, which
+        // iOS Safari ignores (see the html/body globalCss in panda.config.ts).
+        backgroundGradient: "page",
       })}
     >
       <div

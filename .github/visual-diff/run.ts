@@ -92,12 +92,23 @@ async function capture(browser: Browser, url: string, theme: Theme): Promise<PNG
     // することがあるため使わない。`load` + ページ本体の selector と
     // フォント読込完了の明示的な待機で描画の安定を担保する。
     await page.goto(url, { waitUntil: "load", timeout: 60_000 });
-    await page.waitForSelector("main[data-fade]", { timeout: 30_000 });
+    // `main` 単体を待つ (`main[data-fade]` にしない): data-fade マーカーは
+    // LCP 改善で <main> から内側のテキストブロックへ移動しており、撮影対象の
+    // 存在確認がスタイリング用属性に依存すると本体側の変更で壊れる。
+    await page.waitForSelector("main", { timeout: 30_000 });
     await page.evaluate(() => document.fonts.ready);
     await page.waitForFunction(() => !document.documentElement.hasAttribute("data-fonts"));
-    // フェード完了後の描画安定待ち (reduced-motion で transition は無効だが念のため)
+    // fullPage 撮影は使わない: ページグラデーションは position: fixed の
+    // 背景レイヤー (background.tsx) が描くため、fullPage だと最初の
+    // ビューポート分しか塗られず、それより下は継ぎ目 + 素の背景色が写って
+    // しまう (実際のスクロールでは起きない撮影専用のアーティファクト)。
+    // ビューポート自体をページ全高へ広げてから通常撮影することで、
+    // ユーザーが見るのと同じ背景で全域を比較する。
+    const height = await page.evaluate(() => document.documentElement.scrollHeight);
+    await page.setViewportSize({ width: 375, height });
+    // リサイズとフェード完了後の描画安定待ち (reduced-motion で transition は無効だが念のため)
     await page.waitForTimeout(500);
-    const buffer = await page.screenshot({ fullPage: true });
+    const buffer = await page.screenshot();
     return PNG.sync.read(buffer);
   } finally {
     await context.close();
@@ -133,7 +144,11 @@ async function main(): Promise<void> {
   await mkdir(outDir, { recursive: true });
   const server = await serveDist();
   const localUrl = `http://127.0.0.1:${(server.address() as AddressInfo).port}/`;
-  const browser = await chromium.launch();
+  // CHROMIUM_PATH はローカル検証用の上書き (CI では未設定のまま、
+  // `npx playwright install` した Chromium を使う)。
+  const browser = await chromium.launch({
+    executablePath: process.env.CHROMIUM_PATH || undefined,
+  });
   const results: Record<string, DiffResult> = {};
 
   for (const theme of ["dark", "light"] as const) {
