@@ -1,12 +1,28 @@
 import { defineConfig, defineGlobalStyles } from "@pandacss/dev";
 
 const globalCss = defineGlobalStyles({
+  // iOS Safari ignores `background-attachment: fixed`, so the page gradient
+  // must NOT live on <body>: there it sticks to the document instead of the
+  // viewport, and rubber-band overscroll past the page edges exposes the
+  // unstyled (white) canvas — which reads as "the page scrolls beyond the
+  // screen". Instead the gradient is painted by the existing fixed background
+  // layer (src/components/background.tsx), which covers exactly the viewport
+  // everywhere, and <html> gets a solid color matching the gradient's end so
+  // the canvas — the only thing visible in overscroll bands — stays in-theme
+  // no matter how far the page is pulled.
+  //
+  // The colors are written literally (not as a semantic token + `_light`)
+  // because the light/dark condition is a descendant selector on
+  // `[data-theme]`, which can never match <html> — the element the attribute
+  // itself lives on.
+  html: {
+    backgroundColor: "#0A1830",
+    '&[data-theme="light"]': { backgroundColor: "#F4FAFF" },
+  },
   body: {
     fontFamily: "'M PLUS Rounded 1c', sans-serif",
     minHeight: "100dvh",
     color: "text",
-    backgroundGradient: "page",
-    backgroundAttachment: "fixed",
   },
   // FOUT fade-in (see FONT_FADE_INIT_SCRIPT in src/pages/_root.tsx): elements
   // marked `data-fade` (text blocks: ProfileCard's h1/p, each link section,
