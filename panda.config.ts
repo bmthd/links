@@ -15,23 +15,14 @@ const globalCss = defineGlobalStyles({
   // because the light/dark condition is a descendant selector on
   // `[data-theme]`, which can never match <html> — the element the attribute
   // itself lives on.
-  // `overscrollBehaviorY: none` disables the rubber-band bounce past the
-  // page edges (the page could visibly be pulled well below the footer on
-  // iOS). Vertical only, so horizontal swipe-back navigation is untouched;
-  // the known costs are pull-to-refresh on Android Chrome and that iOS
-  // Safari only honors it from 16.4 — older iOS keeps the (theme-colored)
-  // bounce. Set on both html and body because engines disagree on which
-  // element the root scroller reads it from.
   html: {
     backgroundColor: "#0A1830",
     '&[data-theme="light"]': { backgroundColor: "#F4FAFF" },
-    overscrollBehaviorY: "none",
   },
   body: {
     fontFamily: "'M PLUS Rounded 1c', sans-serif",
     minHeight: "100dvh",
     color: "text",
-    overscrollBehaviorY: "none",
   },
   // FOUT fade-in (see FONT_FADE_INIT_SCRIPT in src/pages/_root.tsx): elements
   // marked `data-fade` (text blocks: ProfileCard's h1/p, each link section,
