@@ -9,7 +9,8 @@ const globalCss = defineGlobalStyles({
     backgroundAttachment: "fixed",
   },
   // FOUT fade-in (see FONT_FADE_INIT_SCRIPT in src/pages/_root.tsx): elements
-  // marked `data-fade` (main / footer / the theme toggle button) are hidden
+  // marked `data-fade` (text blocks: ProfileCard's h1/p, each link section,
+  // the footer and the theme toggle button) are hidden
   // while `<html data-fonts="loading">` and fade to visible once that
   // attribute is removed. The background (no `data-fade` marker) is
   // unaffected and stays visible throughout, so the page is never a blank

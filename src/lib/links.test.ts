@@ -4,10 +4,9 @@ import { profile, sections } from "./links";
 const allItems = sections.flatMap((s) => s.items);
 
 describe("profile", () => {
-  it("名前・bio・アバターが仕様どおり", () => {
+  it("名前・bio が仕様どおり", () => {
     expect(profile.name).toBe("じょうげん");
     expect(profile.bio).toBe("フルスタック趣味人");
-    expect(profile.avatar).toBe("/avatar.png");
   });
 });
 

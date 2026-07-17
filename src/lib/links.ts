@@ -4,10 +4,11 @@ export type LinkSection = {
   readonly items: readonly LinkItem[];
 };
 
+// The avatar is not listed here: profile-card.tsx imports it as a build-time
+// data URI from src/generated/avatar.ts (see scripts/generate-images.ts).
 export const profile = {
   name: "じょうげん",
   bio: "フルスタック趣味人",
-  avatar: "/avatar.png",
 } as const;
 
 export const sections: readonly LinkSection[] = [

@@ -19,7 +19,14 @@ const required: string[] = [
   "og:title",
   "https://links.bmth.dev/og.png",
   "summary_large_image",
-  "/avatar.png",
+  // scripts/generate-images.ts が生成したアバターの data URI がインライン
+  // されていること
+  "data:image/webp;base64,",
+  "/avatar-96.png",
+  // scripts/optimize-html.ts(build の後段)がスタイルをインライン化し、
+  // hydration 用 JS を load 後まで遅延させたこと
+  "<style>",
+  'addEventListener("load"',
 ];
 
 const missing = required.filter((s) => !html.includes(s));

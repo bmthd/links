@@ -1,0 +1,8 @@
+# Cloudflare Workers static assets の _headers。/assets/(Vite)と /fonts/
+# (scripts/generate-fonts.ts)はファイル名にコンテンツハッシュを含むので
+# immutable キャッシュにできる。
+/assets/*
+  Cache-Control: public, max-age=31536000, immutable
+
+/fonts/*
+  Cache-Control: public, max-age=31536000, immutable
