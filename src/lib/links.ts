@@ -23,9 +23,9 @@ export const sections: readonly LinkSection[] = [
   {
     heading: "WORKS",
     items: [
-      { label: "ポイントスプリント", url: "https://point-sprint.bmth.dev/" },
-      { label: "お品書きまとめ", url: "https://oshinagaki.bmth.dev/" },
-      { label: "PRリスト", url: "https://pr.bmth.dev/" },
+      { label: "コミケお品書きまとめ", url: "https://oshinagaki.bmth.dev/" },
+      { label: "楽天ポイント計算（ポイントスプリント）", url: "https://point-sprint.bmth.dev/" },
+      { label: "GitHub PRリスト", url: "https://pr.bmth.dev/" },
       { label: "渋滞シミュレーション", url: "https://traffic-jam.bmth.dev/" },
     ],
   },
