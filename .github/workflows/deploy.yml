@@ -12,6 +12,9 @@ jobs:
       - run: pnpm test
       - run: pnpm check
       - run: pnpm build
+        env:
+          # Public token baked into the HTML, so a variable rather than a secret. See README.
+          VITE_CF_BEACON_TOKEN: ${{ vars.CF_BEACON_TOKEN }}
       - run: pnpm check-build
       - uses: cloudflare/wrangler-action@ebbaa1584979971c8614a24965b4405ff95890e0 # v4.0.0
         with:
