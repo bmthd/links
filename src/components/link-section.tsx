@@ -26,7 +26,7 @@ export function LinkSectionBlock({ section }: { section: LinkSection }) {
           key={item.url}
           href={item.url}
           target="_blank"
-          rel="noopener"
+          rel={item.me ? "me noopener" : "noopener"}
           className={cx(
             "glass",
             css({

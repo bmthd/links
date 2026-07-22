@@ -3,9 +3,17 @@ import { Background } from "../components/background";
 import { ProfileCard } from "../components/profile-card";
 import { LinkSectionBlock } from "../components/link-section";
 import { ThemeToggle } from "../components/theme-toggle";
-import { sections } from "../lib/links";
+import { profile, sameAs, sections, siteUrl } from "../lib/links";
 
 const DESCRIPTION = "じょうげんのリンク集。SNS・Webアプリ・同人誌の入り口をまとめています。";
+
+const personJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Person",
+  name: profile.name,
+  url: siteUrl,
+  sameAs,
+};
 
 export default async function HomePage() {
   return (
@@ -20,6 +28,10 @@ export default async function HomePage() {
       <meta property="og:image:height" content="630" />
       <meta name="twitter:card" content="summary_large_image" />
       <link rel="icon" href="/avatar-96.png" />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(personJsonLd) }}
+      />
       <Background />
       <ThemeToggle />
       {/* No data-fade on <main>: the FOUT gate (see _root.tsx) is only about
