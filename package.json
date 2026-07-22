@@ -5,13 +5,13 @@
   "type": "module",
   "scripts": {
     "dev": "waku dev",
-    "build": "waku build",
+    "build": "node scripts/generate-fonts.ts && node scripts/generate-images.ts && node scripts/generate-og.ts && waku build && node scripts/optimize-html.ts",
     "preview": "waku start",
     "typecheck": "tsc --noEmit",
     "test": "vp test run",
     "check": "vp check",
-    "check-build": "node scripts/check-build.mjs",
-    "prepare": "panda codegen"
+    "check-build": "node scripts/check-build.ts",
+    "prepare": "panda codegen && node scripts/generate-fonts.ts && node scripts/generate-images.ts && vp config --no-agent"
   },
   "dependencies": {
     "@fontsource/m-plus-rounded-1c": "^5.2.10",
@@ -22,8 +22,14 @@
   },
   "devDependencies": {
     "@pandacss/dev": "^1.11.4",
+    "@resvg/resvg-js": "^2.6.2",
+    "@types/node": "^26.1.1",
     "@types/react": "^19.2.17",
     "@types/react-dom": "^19.2.3",
+    "@types/subset-font": "^2.3.0",
+    "satori": "^0.26.0",
+    "sharp": "^0.35.3",
+    "subset-font": "^2.5.0",
     "typescript": "^7.0.2",
     "vite-plus": "^0.2.4",
     "vitest": "4.1.10",

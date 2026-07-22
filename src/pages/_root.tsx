@@ -1,5 +1,6 @@
 import type { ReactNode } from "react";
 import { ErrorBoundary } from "waku/router/client";
+import { fontPreloads } from "../generated/fonts";
 
 // Waku's built-in default root renders `<html>` without a `lang` attribute
 // (see `DefaultRoot` in `waku/router/create-pages.js`). This file overrides
@@ -84,6 +85,15 @@ export default function Root({ children }: { children: ReactNode }) {
     <ErrorBoundary>
       <html lang="ja" suppressHydrationWarning>
         <head>
+          {/* The two subset woff2 files (see scripts/generate-fonts.ts) are
+              small and always needed, so preload them instead of waiting for
+              the stylesheet to trigger the fetch — LCP is gated on the font
+              load by the FONT_FADE_INIT_SCRIPT reveal below. crossOrigin is
+              required even same-origin: CSS font fetches are CORS-mode, and a
+              preload with a mismatched mode is not reused. */}
+          {fontPreloads.map((href) => (
+            <link key={href} rel="preload" href={href} as="font" type="font/woff2" crossOrigin="" />
+          ))}
           <script dangerouslySetInnerHTML={{ __html: THEME_INIT_SCRIPT }} />
           <script dangerouslySetInnerHTML={{ __html: FONT_FADE_INIT_SCRIPT }} />
           {CF_BEACON_TOKEN && (

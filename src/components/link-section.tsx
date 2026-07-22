@@ -3,7 +3,10 @@ import type { LinkSection } from "../lib/links";
 
 export function LinkSectionBlock({ section }: { section: LinkSection }) {
   return (
-    <section className={css({ display: "flex", flexDirection: "column", gap: "3", width: "100%" })}>
+    <section
+      data-fade
+      className={css({ display: "flex", flexDirection: "column", gap: "3", width: "100%" })}
+    >
       {section.heading && (
         <h2
           className={css({

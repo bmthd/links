@@ -15,13 +15,18 @@ export default async function HomePage() {
       <meta property="og:title" content="じょうげん | links" />
       <meta property="og:description" content={DESCRIPTION} />
       <meta property="og:url" content="https://links.bmth.dev/" />
-      <meta property="og:image" content="https://links.bmth.dev/avatar.png" />
-      <meta name="twitter:card" content="summary" />
-      <link rel="icon" href="/avatar.png" />
+      <meta property="og:image" content="https://links.bmth.dev/og.png" />
+      <meta property="og:image:width" content="1200" />
+      <meta property="og:image:height" content="630" />
+      <meta name="twitter:card" content="summary_large_image" />
+      <link rel="icon" href="/avatar-96.png" />
       <Background />
       <ThemeToggle />
+      {/* No data-fade on <main>: the FOUT gate (see _root.tsx) is only about
+          text, and the LCP element — the avatar <img> in ProfileCard — must
+          not wait for fonts. The fade markers sit on the text blocks inside
+          (ProfileCard's h1/p, each LinkSectionBlock, the footer). */}
       <main
-        data-fade
         className={css({
           maxWidth: "28rem",
           marginX: "auto",
