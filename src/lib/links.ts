@@ -1,4 +1,6 @@
-export type LinkItem = { readonly label: string; readonly url: string };
+// me: true marks an identity link (X/GitHub/Zenn/Blog). These get rel="me" and
+// feed the JSON-LD sameAs array; WORKS/DOUJINSHI links do not.
+export type LinkItem = { readonly label: string; readonly url: string; readonly me?: boolean };
 export type LinkSection = {
   readonly heading?: string;
   readonly items: readonly LinkItem[];
@@ -14,10 +16,10 @@ export const profile = {
 export const sections: readonly LinkSection[] = [
   {
     items: [
-      { label: "X", url: "https://x.com/j_ktwr" },
-      { label: "GitHub", url: "https://github.com/bmthd" },
-      { label: "Zenn", url: "https://zenn.dev/bmth" },
-      { label: "Blog", url: "https://blog.bmth.dev/" },
+      { label: "X", url: "https://x.com/j_ktwr", me: true },
+      { label: "GitHub", url: "https://github.com/bmthd", me: true },
+      { label: "Zenn", url: "https://zenn.dev/bmth", me: true },
+      { label: "Blog", url: "https://blog.bmth.dev/", me: true },
     ],
   },
   {
@@ -40,3 +42,11 @@ export const sections: readonly LinkSection[] = [
     ],
   },
 ];
+
+export const siteUrl = "https://links.bmth.dev/";
+
+// Identity URLs for JSON-LD sameAs — kept in sync with the me:true links above.
+export const sameAs = sections
+  .flatMap((s) => s.items)
+  .filter((i) => i.me)
+  .map((i) => i.url);

@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { profile, sections } from "./links";
+import { profile, sameAs, sections } from "./links";
 
 const allItems = sections.flatMap((s) => s.items);
 
@@ -28,5 +28,19 @@ describe("sections", () => {
       expect(label.trim().length).toBeGreaterThan(0);
     }
     expect(new Set(allItems.map((i) => i.label)).size).toBe(allItems.length);
+  });
+
+  it("me:true は見出しなし(SNS)セクションのリンクだけ", () => {
+    for (const s of sections) {
+      const allMe = s.items.every((i) => i.me);
+      const noneMe = s.items.every((i) => !i.me);
+      expect(s.heading === undefined ? allMe : noneMe).toBe(true);
+    }
+  });
+});
+
+describe("sameAs", () => {
+  it("me:true のURLと一致する", () => {
+    expect(sameAs).toEqual(allItems.filter((i) => i.me).map((i) => i.url));
   });
 });
