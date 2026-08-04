@@ -6,8 +6,8 @@ import { type Locale, localeMeta, localePath, locales } from "../lib/i18n";
 // its own `lang`), so it must work with JS disabled and before hydration —
 // which this page defers until after window load (see scripts/optimize-html.ts).
 //
-// Placement comes from the row in site.tsx, which holds this and the theme
-// toggle; this element only spaces its own links.
+// Placement comes from the row in src/pages/index.tsx, which holds this and the
+// theme toggle; this element only spaces its own links.
 export function LanguageToggle({ locale }: { locale: Locale }) {
   return (
     <nav
