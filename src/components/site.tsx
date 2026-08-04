@@ -21,26 +21,22 @@ import { localeUrl, profile, sameAs, sections } from "../lib/links";
 // adding a locale is one new page file plus its dictionary entries.
 export function Site({ locale }: { locale: Locale }) {
   const t = translator(locale);
-  const name = t(profile.name);
-  const title = `${name} | links`;
-  const description = t(ui.description);
-  const url = localeUrl(localePath(locale));
 
   const personJsonLd = {
     "@context": "https://schema.org",
     "@type": "Person",
-    name,
-    url,
+    name: t(profile.name),
+    url: localeUrl(localePath(locale)),
     sameAs,
   };
 
   return (
     <>
-      <title>{title}</title>
-      <meta name="description" content={description} />
-      <meta property="og:title" content={title} />
-      <meta property="og:description" content={description} />
-      <meta property="og:url" content={url} />
+      <title>{`${t(profile.name)} | links`}</title>
+      <meta name="description" content={t(ui.description)} />
+      <meta property="og:title" content={`${t(profile.name)} | links`} />
+      <meta property="og:description" content={t(ui.description)} />
+      <meta property="og:url" content={localeUrl(localePath(locale))} />
       <meta property="og:image" content={localeUrl(ogImagePath(locale))} />
       <meta property="og:image:width" content="1200" />
       <meta property="og:image:height" content="630" />
@@ -51,7 +47,7 @@ export function Site({ locale }: { locale: Locale }) {
           <meta key={other} property="og:locale:alternate" content={localeMeta[other].ogLocale} />
         ))}
       <meta name="twitter:card" content="summary_large_image" />
-      <link rel="canonical" href={url} />
+      <link rel="canonical" href={localeUrl(localePath(locale))} />
       {/* Each locale points at every locale (itself included) so search engines
           can pair the documents; x-default goes to the default locale, which is
           the one served at the bare root path. */}
@@ -117,7 +113,7 @@ export function Site({ locale }: { locale: Locale }) {
           paddingBottom: "8",
         })}
       >
-        {`${t(ui.madeBy)} ${name} · `}
+        {`${t(ui.madeBy)} ${t(profile.name)} · `}
         <a
           href="https://github.com/bmthd/links"
           target="_blank"
