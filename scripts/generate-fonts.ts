@@ -35,8 +35,10 @@ const root = join(dirname(fileURLToPath(import.meta.url)), "..");
 const chars = new Set<string>();
 for (let c = 0x20; c <= 0x7e; c++) chars.add(String.fromCharCode(c));
 for (const dir of ["src/pages", "src/components", "src/lib"]) {
-  for (const file of readdirSync(join(root, dir))) {
-    if (!/\.tsx?$/.test(file)) continue;
+  // Recursive: per-locale pages live in subdirectories (src/pages/en/), and a
+  // locale whose text was never scanned would render with missing glyphs.
+  for (const file of readdirSync(join(root, dir), { recursive: true })) {
+    if (typeof file !== "string" || !/\.tsx?$/.test(file)) continue;
     for (const ch of readFileSync(join(root, dir, file), "utf8")) chars.add(ch);
   }
 }

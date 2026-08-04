@@ -7,8 +7,9 @@ src/pages.gen.ts
 .playwright-cli/
 .github/visual-diff/output/
 .github/visual-diff/package-lock.json
-# scripts/generate-og.mjs がビルド時に生成する
+# scripts/generate-og.ts がビルド時にロケール分生成する
 public/og.png
+public/og-*.png
 # scripts/generate-fonts.ts / generate-images.ts がビルド時に生成する
 public/fonts/
 src/generated/

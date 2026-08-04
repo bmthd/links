@@ -49,20 +49,21 @@ function toggleTheme(event: React.MouseEvent<HTMLButtonElement>) {
   });
 }
 
-export function ThemeToggle() {
+// `label` is resolved by the server component that renders this: the dictionary
+// stays out of the client bundle, which is all this component needs from i18n.
+export function ThemeToggle({ label }: { label: string }) {
   return (
     <button
       type="button"
-      aria-label="テーマ切り替え"
+      aria-label={label}
       data-fade
       onClick={toggleTheme}
       className={cx(
         "glass",
         css({
-          position: "fixed",
-          top: "4",
-          right: "4",
-          zIndex: 10,
+          // Placement comes from the row in src/pages/index.tsx (shared with
+          // the language toggle), which is anchored to the top of the page
+          // rather than the viewport — these controls do not follow the scroll.
           width: "44px",
           height: "44px",
           borderRadius: "50%",

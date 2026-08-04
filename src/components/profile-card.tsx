@@ -1,8 +1,10 @@
 import { css } from "../styled-system/css";
 import { avatarSrc } from "../generated/avatar";
+import { type Locale, translator } from "../lib/i18n";
 import { profile } from "../lib/links";
 
-export function ProfileCard() {
+export function ProfileCard({ locale }: { locale: Locale }) {
+  const t = translator(locale);
   return (
     <header
       className={css({
@@ -28,10 +30,10 @@ export function ProfileCard() {
         })}
       />
       <h1 data-fade className={css({ fontSize: "2xl", fontWeight: "700" })}>
-        {profile.name}
+        {t(profile.name)}
       </h1>
       <p data-fade className={css({ color: "textDim", fontSize: "sm" })}>
-        {profile.bio}
+        {t(profile.bio)}
       </p>
     </header>
   );
