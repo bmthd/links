@@ -65,8 +65,25 @@ export function Site({ locale }: { locale: Locale }) {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(personJsonLd) }}
       />
       <Background />
-      <LanguageToggle locale={locale} />
-      <ThemeToggle label={t(ui.themeToggle)} />
+      {/* Both controls are pinned to the top of the PAGE, not the viewport:
+          `absolute` resolves against the initial containing block (no ancestor
+          is positioned), so they sit in the same top-right corner as before at
+          scroll 0 but scroll away with the content instead of following it.
+          Positioning them together as one row also means the language toggle
+          does not have to know the theme button's width. */}
+      <div
+        className={css({
+          position: "absolute",
+          top: "4",
+          right: "4",
+          zIndex: 10,
+          display: "flex",
+          gap: "2",
+        })}
+      >
+        <LanguageToggle locale={locale} />
+        <ThemeToggle label={t(ui.themeToggle)} />
+      </div>
       {/* No data-fade on <main>: the FOUT gate (see _root.tsx) is only about
           text, and the LCP element — the avatar <img> in ProfileCard — must
           not wait for fonts. The fade markers sit on the text blocks inside

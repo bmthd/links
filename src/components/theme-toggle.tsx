@@ -61,10 +61,9 @@ export function ThemeToggle({ label }: { label: string }) {
       className={cx(
         "glass",
         css({
-          position: "fixed",
-          top: "4",
-          right: "4",
-          zIndex: 10,
+          // Placement comes from the row in site.tsx (shared with the language
+          // toggle), which is anchored to the top of the page rather than the
+          // viewport — these controls deliberately do not follow the scroll.
           width: "44px",
           height: "44px",
           borderRadius: "50%",

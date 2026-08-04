@@ -5,16 +5,13 @@ import { type Locale, localeMeta, localePath, locales } from "../lib/i18n";
 // navigation to a different static document (each locale has its own HTML with
 // its own `lang`), so it must work with JS disabled and before hydration —
 // which this page defers until after window load (see scripts/optimize-html.ts).
+//
+// Placement comes from the row in site.tsx, which holds this and the theme
+// toggle; this element only spaces its own links.
 export function LanguageToggle({ locale }: { locale: Locale }) {
   return (
     <nav
       className={css({
-        position: "fixed",
-        top: "4",
-        // Sits immediately left of the theme toggle: that button is 44px wide
-        // and pinned at right: token(spacing.4), so this clears it by 8px.
-        right: "calc(token(spacing.4) + 52px)",
-        zIndex: 10,
         display: "flex",
         gap: "2",
       })}
