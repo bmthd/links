@@ -4,6 +4,9 @@
     "target": "esnext",
     "module": "esnext",
     "moduleResolution": "bundler",
+    // scripts/ は node の type stripping で直接実行されるため、src からの
+    // import は拡張子まで書く必要がある(node は拡張子を補完しない)
+    "allowImportingTsExtensions": true,
     "skipLibCheck": true,
     "noUncheckedIndexedAccess": true,
     "jsx": "react-jsx",

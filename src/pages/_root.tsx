@@ -1,6 +1,7 @@
 import type { ReactNode } from "react";
 import { ErrorBoundary } from "waku/router/client";
 import { fontPreloads } from "../generated/fonts";
+import { defaultLocale } from "../lib/i18n";
 
 // Runs before first paint to set `data-theme` from localStorage/OS, avoiding
 // a theme flash. suppressHydrationWarning below: server HTML has no data-theme.
@@ -34,7 +35,11 @@ const CF_BEACON_TOKEN = import.meta.env.VITE_CF_BEACON_TOKEN;
 export default function Root({ children }: { children: ReactNode }) {
   return (
     <ErrorBoundary>
-      <html lang="ja" suppressHydrationWarning>
+      {/* Waku renders this root element once and shares it across every route,
+          so `lang` cannot depend on the locale here. It is the default locale's
+          code, and scripts/optimize-html.ts rewrites it in each non-default
+          locale's built HTML (see the note there). */}
+      <html lang={defaultLocale} suppressHydrationWarning>
         <head>
           {/* Preload the always-needed subset fonts (LCP gates on their load).
               crossOrigin is required even same-origin, else the CORS-mode CSS

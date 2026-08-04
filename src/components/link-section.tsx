@@ -1,7 +1,9 @@
 import { css, cx } from "../styled-system/css";
+import { type Locale, translator } from "../lib/i18n";
 import type { LinkSection } from "../lib/links";
 
-export function LinkSectionBlock({ section }: { section: LinkSection }) {
+export function LinkSectionBlock({ section, locale }: { section: LinkSection; locale: Locale }) {
+  const t = translator(locale);
   return (
     <section
       data-fade
@@ -18,7 +20,7 @@ export function LinkSectionBlock({ section }: { section: LinkSection }) {
             marginTop: "2",
           })}
         >
-          {section.heading}
+          {t(section.heading)}
         </h2>
       )}
       {section.items.map((item) => (
@@ -45,7 +47,7 @@ export function LinkSectionBlock({ section }: { section: LinkSection }) {
             }),
           )}
         >
-          {item.label}
+          {t(item.label)}
         </a>
       ))}
     </section>

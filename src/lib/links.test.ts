@@ -1,12 +1,14 @@
 import { describe, expect, it } from "vitest";
+import { type Locale, locales, translator } from "./i18n";
 import { profile, sameAs, sections } from "./links";
 
 const allItems = sections.flatMap((s) => s.items);
 
 describe("profile", () => {
   it("名前・bio が仕様どおり", () => {
-    expect(profile.name).toBe("じょうげん");
-    expect(profile.bio).toBe("フルスタック趣味人");
+    expect(profile.name.ja).toBe("じょうげん");
+    expect(profile.bio.ja).toBe("フルスタック趣味人");
+    expect(profile.name.en).toBe("Jougen");
   });
 });
 
@@ -23,11 +25,13 @@ describe("sections", () => {
     expect(new Set(allItems.map((i) => i.url)).size).toBe(allItems.length);
   });
 
-  it("ラベルが空でなく重複なし", () => {
-    for (const { label } of allItems) {
+  it.each(locales)("ラベルが %s で空でなく重複なし", (locale: Locale) => {
+    const t = translator(locale);
+    const labels = allItems.map((i) => t(i.label));
+    for (const label of labels) {
       expect(label.trim().length).toBeGreaterThan(0);
     }
-    expect(new Set(allItems.map((i) => i.label)).size).toBe(allItems.length);
+    expect(new Set(labels).size).toBe(labels.length);
   });
 
   it("me:true は見出しなし(SNS)セクションのリンクだけ", () => {
