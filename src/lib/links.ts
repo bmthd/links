@@ -39,6 +39,10 @@ export const sections: readonly LinkSection[] = [
         label: { ja: "楽天市場ポイント計算", en: "Rakuten Ichiba Point Calculator" },
         url: "https://point-sprint.bmth.dev/",
       },
+      {
+        label: { ja: "TCGドロー確率計算機", en: "TCG Draw Probability Calculator" },
+        url: "https://tcg-tool.pages.dev/",
+      },
       { label: { ja: "GitHub PRリスト", en: "GitHub PR List" }, url: "https://pr.bmth.dev/" },
       {
         label: { ja: "渋滞シミュレーション", en: "Traffic Jam Simulation" },
