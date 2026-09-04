@@ -44,6 +44,10 @@ export const sections: readonly LinkSection[] = [
         label: { ja: "渋滞シミュレーション", en: "Traffic Jam Simulation" },
         url: "https://traffic-jam.bmth.dev/",
       },
+      {
+        label: { ja: "TCGドロー確率計算機", en: "TCG Draw Probability Calculator" },
+        url: "https://tcg-tool.pages.dev/",
+      },
     ],
   },
   {
