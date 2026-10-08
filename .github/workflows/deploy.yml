@@ -16,7 +16,11 @@ jobs:
           # Public token baked into the HTML, so a variable rather than a secret. See README.
           VITE_CF_BEACON_TOKEN: ${{ vars.CF_BEACON_TOKEN }}
       - run: pnpm check-build
-      - uses: cloudflare/wrangler-action@ebbaa1584979971c8614a24965b4405ff95890e0 # v4.0.0
-        with:
-          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+      # `cf build` は Waku を検出して素の `waku build` を走らせてしまう(フォント・OG生成や
+      # HTML最適化を含む `pnpm build` を通らない)ので、ビルド済みの dist/public を
+      # wrangler バンドラー(cf のデリゲート)で Build Output にしてから --prebuilt で上げる
+      - run: pnpm exec cf-wrangler build
+      - run: pnpm exec cf deploy --prebuilt
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}

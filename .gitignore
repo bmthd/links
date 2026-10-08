@@ -3,6 +3,8 @@ dist/
 src/styled-system/
 src/pages.gen.ts
 .wrangler/
+# cf のビルド出力(Build Output)と型生成
+.cloudflare/
 *.log
 .playwright-cli/
 .github/visual-diff/output/

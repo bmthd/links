@@ -21,25 +21,24 @@ jobs:
             alias="pr-${{ github.event.pull_request.number }}"
           fi
           echo "alias=$alias" >> "$GITHUB_OUTPUT"
+      # cf build を使わない理由は deploy.yml を参照
+      - run: pnpm exec cf-wrangler build
       - name: Upload preview version
         id: deploy
-        uses: cloudflare/wrangler-action@ebbaa1584979971c8614a24965b4405ff95890e0 # v4.0.0
-        with:
-          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          command: versions upload --preview-alias ${{ steps.alias.outputs.alias }}
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          PREVIEW_ALIAS: ${{ steps.alias.outputs.alias }}
+        run: |
+          set -o pipefail
+          pnpm exec cf workers versions create --prebuilt --preview-alias "$PREVIEW_ALIAS" 2>&1 | tee "$RUNNER_TEMP/cf-output.txt"
       - name: Extract preview URL
         id: url
-        env:
-          COMMAND_OUTPUT: ${{ steps.deploy.outputs.command-output }}
-          DEPLOYMENT_URL: ${{ steps.deploy.outputs.deployment-url }}
         run: |
-          url=$(printf '%s' "$COMMAND_OUTPUT" | grep -Eo 'Version Preview Alias URL: https://[a-z0-9.-]+\.workers\.dev' | grep -Eo 'https://[a-z0-9.-]+\.workers\.dev' | head -n1)
+          output="$RUNNER_TEMP/cf-output.txt"
+          url=$(grep -Eo 'Version Preview Alias URL: https://[a-z0-9.-]+\.workers\.dev' "$output" | grep -Eo 'https://[a-z0-9.-]+\.workers\.dev' | head -n1)
           if [ -z "$url" ]; then
-            url=$(printf '%s' "$COMMAND_OUTPUT" | grep -Eo 'Version Preview URL: https://[a-z0-9.-]+\.workers\.dev' | grep -Eo 'https://[a-z0-9.-]+\.workers\.dev' | head -n1)
-          fi
-          if [ -z "$url" ]; then
-            url="$DEPLOYMENT_URL"
+            url=$(grep -Eo 'Version Preview URL: https://[a-z0-9.-]+\.workers\.dev' "$output" | grep -Eo 'https://[a-z0-9.-]+\.workers\.dev' | head -n1)
           fi
           if [ -z "$url" ]; then
             echo "::warning::プレビューURLは未発行です(preview_urls 設定が本番デプロイで同期された後の PR から有効になります)"

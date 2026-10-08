@@ -49,8 +49,8 @@ export const localeMeta = {
 >;
 
 // Path of a locale's page. The default locale keeps the bare root path, and the
-// others have NO trailing slash on purpose: wrangler.jsonc serves the site with
-// `html_handling: "drop-trailing-slash"`, so `/en/` 301-redirects to `/en` —
+// others have NO trailing slash on purpose: cloudflare.config.ts serves the site with
+// `htmlHandling: "drop-trailing-slash"`, so `/en/` 301-redirects to `/en` —
 // linking (and pointing canonical/hreflang at) the redirect target avoids a
 // pointless hop.
 export const localePath = (locale: Locale): string =>
