@@ -27,6 +27,16 @@ pnpm install / pnpm dev / pnpm test / pnpm build && pnpm check-build
 
 - `<html lang>` だけは例外。Wakuはルート要素(`src/pages/_root.tsx`)を全ルートで1回しか描画しないためロケールごとに変えられず、ビルド後に `scripts/optimize-html.ts` が各HTMLを書き換えている。`waku dev` では非既定ロケールのページも `lang="ja"` のままになる
 
+## 依存の自動アップデート(Renovate)
+
+`renovate.json` で [Renovate](https://github.com/apps/renovate) が毎週月曜朝(JST)に更新PRを作る。npm(`package.json`、`.github/visual-diff/package.json`、`pnpm-workspace.yaml` の overrides)、GitHub Actions(SHA固定+バージョンコメント、pinact と同じ形式)、`mise.toml`(Node / pnpm / pinact)が対象。
+
+- 公開から1日経っていないバージョンは提案しない(pnpm の `minimumReleaseAge` に合わせている)
+- 安定版の minor / patch と Actions は CI が通れば Renovate が自動マージ → main への push で自動デプロイ
+- major、0.x、プレリリース(waku beta など)、Node / pnpm は自動マージせず手動レビュー
+- vite-plus・vite-plus-core・vitest は overrides で揃えているため1つのPRにまとめる
+- 有効化にはリポジトリへの Renovate GitHub App のインストールが必要
+
 ## 必要なシークレット(GitHub Actions)
 
 - `CLOUDFLARE_API_TOKEN`(Workers Scripts:Edit 権限)

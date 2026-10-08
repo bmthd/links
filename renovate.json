@@ -1,0 +1,62 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": [
+    "config:recommended",
+    "helpers:pinGitHubActionDigestsToSemver",
+    ":timezone(Asia/Tokyo)"
+  ],
+  "schedule": ["before 9am on monday"],
+  "minimumReleaseAge": "1 day",
+  "internalChecksFilter": "strict",
+  "rangeStrategy": "bump",
+  "platformAutomerge": false,
+  "lockFileMaintenance": {
+    "enabled": true,
+    "automerge": true,
+    "schedule": ["before 9am on monday"]
+  },
+  "customManagers": [
+    {
+      "description": "pnpm-workspace.yaml の overrides(vite → vite-plus-core、vitest)を追従させる",
+      "customType": "regex",
+      "managerFilePatterns": ["/^pnpm-workspace\\.yaml$/"],
+      "matchStrings": [
+        "\\n  vite: npm:(?<depName>@voidzero-dev/vite-plus-core)@(?<currentValue>\\S+)",
+        "\\n  (?<depName>vitest): (?<currentValue>\\d\\S*)"
+      ],
+      "datasourceTemplate": "npm"
+    }
+  ],
+  "packageRules": [
+    {
+      "description": "vite-plus と overrides で固定している本体・vitest は揃えて上げないと壊れる",
+      "groupName": "vite-plus",
+      "matchPackageNames": ["vite-plus", "@voidzero-dev/vite-plus-core", "vitest"]
+    },
+    {
+      "description": "react / react-dom / 型定義は揃えて上げる",
+      "groupName": "react",
+      "matchPackageNames": ["react", "react-dom", "@types/react", "@types/react-dom"]
+    },
+    {
+      "description": "GitHub Actions はまとめて1PRに",
+      "groupName": "GitHub Actions",
+      "matchManagers": ["github-actions"]
+    },
+    {
+      "description": "安定版の minor / patch と Actions のダイジェスト更新は CI が通れば自動マージ",
+      "matchUpdateTypes": ["minor", "patch", "pin", "digest"],
+      "automerge": true
+    },
+    {
+      "description": "0.x とプレリリース(waku beta など)は minor/patch でも破壊的変更があり得るので手動レビュー",
+      "matchCurrentVersion": "/^[\\^~]?v?0\\.|-/",
+      "automerge": false
+    },
+    {
+      "description": "Node / pnpm / pinact(mise.toml)は手動レビュー",
+      "matchManagers": ["mise"],
+      "automerge": false
+    }
+  ]
+}
