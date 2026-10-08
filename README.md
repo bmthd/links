@@ -5,11 +5,13 @@
 - Waku(静的RSC)+ Panda CSS。Apple Liquid Glass 風デザイン
 - リンクの追加・変更は `src/lib/links.ts` を編集するだけ
 - 日本語(`/`)と英語(`/en`)の2ロケール。詳細は下記「多言語対応」
-- main に push すると GitHub Actions が Cloudflare Workers(静的アセット)へデプロイ
+- main に push すると GitHub Actions が [`cf`](https://github.com/cloudflare/cf) CLI で Cloudflare Workers(静的アセット)へデプロイ。Worker設定は `cloudflare.config.ts`、アセットの場所は `wrangler.config.ts`(cf が使う wrangler バンドラーの設定)
 
 ## 開発
 
 pnpm install / pnpm dev / pnpm test / pnpm build && pnpm check-build
+
+手元からデプロイする場合: `pnpm build && pnpm exec cf-wrangler build && pnpm exec cf deploy --prebuilt`(`cf build` は Waku を検出して素の `waku build` だけを走らせるため使わない)
 
 ## 多言語対応
 
