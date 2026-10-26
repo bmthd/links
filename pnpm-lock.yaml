@@ -25,8 +25,8 @@ importers:
         specifier: ^19.2.7
         version: 19.2.7(react@19.2.7)
       waku:
-        specifier: 1.0.0-beta.6
-        version: 1.0.0-beta.6(@types/node@26.6.5)(esbuild@0.28.1)(react-dom@19.2.7(react@19.2.7))(react-server-dom-webpack@19.2.7(react-dom@19.2.7(react@19.2.7))(react@19.2.7)(webpack@5.108.4(esbuild@0.28.1)(lightningcss@1.32.0)(postcss@8.5.14)))(react@19.2.7)(terser@5.48.0)(typescript@7.0.2)
+        specifier: 1.0.0-rc.4
+        version: 1.0.0-rc.4(@types/node@26.6.5)(esbuild@0.28.1)(react-dom@19.2.7(react@19.2.7))(react-server-dom-webpack@19.3.1(react-dom@19.2.7(react@19.2.7))(react@19.2.7)(webpack@5.108.4(esbuild@0.28.1)(lightningcss@1.32.0)(postcss@8.5.14)))(react@19.2.7)(terser@5.48.0)(typescript@7.0.2)
     devDependencies:
       '@pandacss/dev':
         specifier: ^1.12.1
@@ -559,11 +559,11 @@ packages:
   '@fontsource/m-plus-rounded-1c@5.2.10':
     resolution: {integrity: sha512-PLrYoJHCBMApU8zioMT+Un6TLr6JTI7lBJWXo+t2ZNdpEn1XqZG3Y3XvNuIxdX1F3m0UqvtEbtBMHgAbTdefOw==}
 
-  '@hono/node-server@2.0.8':
-    resolution: {integrity: sha512-GuCWzLxwg218fy1JaHculFsdcuY12hxit83V+algozTPnwhNjLrRL/Alg9OYjLZLoUZ1rw/S4CdTMsnkSKCmFA==}
+  '@hono/node-server@2.1.5':
+    resolution: {integrity: sha512-MgP/I06GdvsilDspMk/qmRzpk8LOUStP6jFAbSRi40W09DhoyUn+Mj7eyKICPqeYKybOjVFLVIAQzvu1bfIa7Q==}
     engines: {node: '>=20'}
     peerDependencies:
-      hono: ^4
+      hono: ^4 || ^5.0.0-0
 
   '@img/colour@1.1.0':
     resolution: {integrity: sha512-Td76q7j57o/tLVdgS746cYARfSyxk8iEfRxewL9h4OMzYhbW4TAcppl0mT4eyqXddh6L/jwoM75mo7ixa/pCeQ==}
@@ -897,6 +897,9 @@ packages:
 
   '@jridgewell/sourcemap-codec@1.5.5':
     resolution: {integrity: sha512-cYQ9310grqxueWbl+WuIUIaiUaDcj7WOq5fVhEljNVgRfOUhY9fy2zTvfoqWsnebh8Sl70VScFbICvJnLKB0Og==}
+
+  '@jridgewell/sourcemap-codec@1.6.0':
+    resolution: {integrity: sha512-T7jf+5zgsZHwNJ4lvQ7/aezbyk0nNX+zJVWpmHA7VYsEx7a7qr5Rg5IbtJFqkgze5Y2sruq1RUY8Q837Od7iFw==}
 
   '@jridgewell/trace-mapping@0.3.31':
     resolution: {integrity: sha512-zzNR+SdQSDJzc8joaeP8QQoCQr8NuYx2dIIytl1QeBEZHJ9uW6hebsrYgbz8hJwUQao3TWCMtmfV8Nu1twOLAw==}
@@ -1563,8 +1566,8 @@ packages:
       babel-plugin-react-compiler:
         optional: true
 
-  '@vitejs/plugin-rsc@0.5.27':
-    resolution: {integrity: sha512-s1fd5DUkPXk86DDHPM/kP93WrvI0MoA8klxdDZmD1fMSaA9xujfgunsm8ZoUH0FemR+63vNalFsIDR0AJH4ktg==}
+  '@vitejs/plugin-rsc@0.5.38':
+    resolution: {integrity: sha512-SoiRBJBVd3Qg6Frnvdk6LwugJYlQKgee+uqySxKz5T/KsCZUgdw529Klzg4IDJuP/EOfsIJ2YiOKAFY8tnr1kg==}
     peerDependencies:
       react: '*'
       react-dom: '*'
@@ -1952,9 +1955,10 @@ packages:
   dom-accessibility-api@0.5.16:
     resolution: {integrity: sha512-X7BJ2yElsnOJ30pZF4uIIDfBEVgF4XEBxL9Bxhy6dnrm5hkzqmsWHGTiHqRiITNhMyFLyAiWndIJP7Z1NTteDg==}
 
-  dotenv@17.4.2:
-    resolution: {integrity: sha512-nI4U3TottKAcAD9LLud4Cb7b2QztQMUEfHbvhTH09bqXTxnSie8WnjPALV/WMCrJZ6UV/qHJ6L03OqO3LcdYZw==}
+  dotenv@18.0.9:
+    resolution: {integrity: sha512-3fVOW4cB02R066PUSwn8O4TJyz9NckQl7F81blIbaq9jKBm2tSmOKky7ZHIXzGvkVPXCSn6jkpziBPZdGFs8Tw==}
     engines: {node: '>=12'}
+    hasBin: true
 
   electron-to-chromium@1.5.387:
     resolution: {integrity: sha512-TaxwufTFDufvPEoXdhwVrA3UdFWBeWGkYoJ1K8ldF1xe6gKfth6iRNS5lTQ5JPNOHdGQm8PT1QYKUqFLCiUefQ==}
@@ -1975,6 +1979,9 @@ packages:
 
   es-module-lexer@2.3.0:
     resolution: {integrity: sha512-KLdwQm2NvGLDkQDCGvmiQrhkd0JbMzXthwQAUgWjQuQdBLFa3eiBP5arXZyA+f8x+x7OXgud6bq2rxjGtHV2tw==}
+
+  es-module-lexer@3.0.4:
+    resolution: {integrity: sha512-BldNY5mwkVu+cQ5Ymn3e6hB9Sx8XHx4ZevWbiUyZbfKxJxYO27Hf0wfzkxIaD5CAJMaGl3YspKELj0ff/7nCMA==}
 
   esbuild@0.25.12:
     resolution: {integrity: sha512-bbPBYYrtZbkt6Os6FiTLCTFxvq4tt3JKall1vRwshA3fdVztsLAatFaZobhkBC8/BrPetoa0oksYoKXoG4ryJg==}
@@ -2118,11 +2125,11 @@ packages:
     resolution: {integrity: sha512-7vuh85V5cdDofPyxn58nrPjBktZo0u9x1g8WtjQol+jZDaE+fhN+cIvTj11GndBnMnyfrUOG1sZQxCdjKh+DKg==}
     engines: {node: '>= 10.13.0'}
 
+  js-tokens@10.0.0:
+    resolution: {integrity: sha512-lM/UBzQmfJRo9ABXbPWemivdCW8V2G8FHaHdypQaIy523snUjog0W71ayWXTjiR+ixeMyVHN2XcpnTd/liPg/Q==}
+
   js-tokens@4.0.0:
     resolution: {integrity: sha512-RdJUflcE3cUzKiMqQgsCu06FPu9UdIJO0beYbPhHN4k6apgJtifcoCtT9bcxOpYBtpD2kCM6Sbzg4CausW/PKQ==}
-
-  js-tokens@9.0.1:
-    resolution: {integrity: sha512-mxa9E9ITFOt0ban3j6L5MpjwegGz6lBQmM1IJkWeBZGcMxto50+eWdjC/52xDbS2vy0k7vIMK0Fe2wfL9OQSpQ==}
 
   json-schema-traverse@1.0.0:
     resolution: {integrity: sha512-NM8/P9n3XjXhIZn1lLhkFaACTOURQXjWhV4BA/RnOv8xvgqtqpAX9IO4mRQxSx1Rlo4tqzeqb0sOlruaOy3dug==}
@@ -2307,6 +2314,9 @@ packages:
   magic-string@0.30.21:
     resolution: {integrity: sha512-vd2F4YUyEXKGcLHoq+TEyCjxueSeHnFxyyjNp80yg0XV4vUhnDer/lvvlqM/arB5bXQN5K2/3oinyCRyx8T2CQ==}
 
+  magic-string@1.4.3:
+    resolution: {integrity: sha512-z12OxmaPGE0F4xlpGdjuAUckipLpQlTAuAmyGhNoD7ODpYUzvDfvtxUbjM/jwznyP178oju/KDdyi220wNJ0RQ==}
+
   merge-stream@2.0.0:
     resolution: {integrity: sha512-abv/qOcuPfk3URPfDzmZU1LKmuw8kT+0nIHvKrKgFrwifol/doWcdA4ZqsWQ8ENrFKkd67Mfpo/LovbIUsbt3w==}
 
@@ -2409,6 +2419,10 @@ packages:
 
   obug@2.1.3:
     resolution: {integrity: sha512-9miFgM2OFba7hB+pRgvtV84pYTBaoTHohvmIgiRt6dRIzbwEOIaNaP+dIlGs2fNFoB0SeISs0Jz5WFVRid6Xyg==}
+    engines: {node: '>=12.20.0'}
+
+  obug@3.0.0:
+    resolution: {integrity: sha512-5vvB5+W7ePv+p3uqxi+RcW1XAzLW0/hxt3/4X4Lc4qHudzOhmBiBwOY6DRob4WnanAEGvNcLjF+KNOufrUoEQw==}
     engines: {node: '>=12.20.0'}
 
   outdent@0.8.0:
@@ -2561,12 +2575,12 @@ packages:
   react-is@17.0.2:
     resolution: {integrity: sha512-w2GsyukL62IJnlaff/nRegPQR94C/XXamvMWmSHRJ4y7Ts/4ocGRmTHvOs8PSE6pB3dWOrD/nueuU5sduBsQ4w==}
 
-  react-server-dom-webpack@19.2.7:
-    resolution: {integrity: sha512-bYfuvqPJnHB4CHo2Ze7fQyJAO77TUu1W/aKFt81ICXbLiOTg5jHaO/NPDlpvGWUALoEGaGb7Oi1uXAaO+Bw6jw==}
+  react-server-dom-webpack@19.3.1:
+    resolution: {integrity: sha512-I1Smf6Yc+389rFWPwyYjvCQVK1XFWpb2M9gvgYgfpbZ+LPqkZtb0tT9Fwdk0K+wknK2E+ns82lC0DCYLnXCVGA==}
     engines: {node: '>=0.10.0'}
     peerDependencies:
-      react: ^19.2.7
-      react-dom: ^19.2.7
+      react: ^19.3.1
+      react-dom: ^19.3.1
       webpack: ^5.59.0
 
   react@19.2.7:
@@ -2588,8 +2602,8 @@ packages:
     resolution: {integrity: sha512-g6QUff04oZpHs0eG5p83rFLhHeV00ug/Yf9nZM6fLeUrPguBTkTQOdpAWWspMh55TZfVQDPaN3NQJfbVRAxdIw==}
     engines: {iojs: '>=1.0.0', node: '>=0.10.0'}
 
-  rsc-html-stream@0.0.7:
-    resolution: {integrity: sha512-v9+fuY7usTgvXdNl8JmfXCvSsQbq2YMd60kOeeMIqCJFZ69fViuIxztHei7v5mlMMa2h3SqS+v44Gu9i9xANZA==}
+  rsc-html-stream@0.0.8:
+    resolution: {integrity: sha512-5wSLqZmmxqVYV/70Ueq2XMw0NRPeTeUlUCxA+CEdDqE/IGDXG8EOUOjENzC3WYwWkeYSAI8ZrWbpIhPRK4UuRw==}
 
   run-parallel@1.2.0:
     resolution: {integrity: sha512-5l4VyZR86LZ/lDxZTR6jqL8AFE2S0IFLMP26AbjsLVADxHdhB/c0GUsH+y39UfCi3dzz8OlQuPmnaJOMoDHQBA==}
@@ -2649,8 +2663,8 @@ packages:
     resolution: {integrity: sha512-UjgapumWlbMhkBgzT7Ykc5YXUT46F0iKu8SGXq0bcwP5dz/h0Plj6enJqjz1Zbq2l5WaqYnrVbwWOWMyF3F47g==}
     engines: {node: '>=0.10.0'}
 
-  srvx@0.11.21:
-    resolution: {integrity: sha512-GWTHjKMeekX8CwJf4VU9Oo6mJpSGaflGMddbCvR+Cmmh9sslRMiGbAoqqZacE0r1ncARh6buCEETr2W52F8b1w==}
+  srvx@1.0.7:
+    resolution: {integrity: sha512-8h30Qy2cpYkcXgByHNpV4+jp609bU3ic7MqnfyLQ2Fpa8BgjIaI2zfsDKAIbwm8DcYDrCLqm5izF5KeL2nxdvg==}
     engines: {node: '>=20.16.0'}
     hasBin: true
 
@@ -2668,8 +2682,8 @@ packages:
     resolution: {integrity: sha512-Y38VPSHcqkFrCpFnQ9vuSXmquuv5oXOKpGeT6aGrr3o3Gc9AlVa6JBfUSOCnbxGGZF+/0ooI7KrPuUSztUdU5A==}
     engines: {node: '>=8'}
 
-  strip-literal@3.1.0:
-    resolution: {integrity: sha512-8r3mkIM/2+PpjHoOtiAW8Rg3jJLHaV7xPwG+YRGrv6FP0wwk/toTpATxWYOW0BKdWwl82VT2tFYi5DlROa0Mxg==}
+  strip-literal@4.0.0:
+    resolution: {integrity: sha512-PaqAvfUZKBwc/SLmNZtHmzK+v19Z4O4eS3cKPeGvbIv/U3pnyEq4Tuw3/4v/FwfM8VQaEawsyCcOQ0P+kpwWWw==}
 
   subset-font@2.9.0:
     resolution: {integrity: sha512-WJulQeFwbewrXIGcLJbSZFWI44fHW8gNRuPzLywfDL8w38IPRbN1JFxwG76aoohw9kcFdvjVIn2QmID1iy119A==}
@@ -2745,8 +2759,8 @@ packages:
   tslib@2.8.1:
     resolution: {integrity: sha512-oJFu94HQb+KVduSUQL7wnpmqnfmLsOA/nAh6b6EH0wCEoK0/mPeXU6c3wKDV83MkOuHPRHtSXKKU99IBazS/2w==}
 
-  turbo-stream@3.2.0:
-    resolution: {integrity: sha512-EK+bZ9UVrVh7JLslVFOV0GEMsociOqVOvEMTAd4ixMyffN5YNIEdLZWXUx5PJqDbTxSIBWw04HS9gCY4frYQDQ==}
+  turbo-stream@3.2.1:
+    resolution: {integrity: sha512-BaX0eWz3IrypOVDFqPv3VGD6uZZW8y3oFAOJqZQ+oopmOyQ8/xNm7IMwAJFvxax2DBa8zSk+/AeqA6D6b1PXGg==}
 
   typescript@6.0.2:
     resolution: {integrity: sha512-bGdAIrZ0wiGDo5l8c++HWtbaNCWTS4UTv7RaTH/ThVIgjkveJt83m74bBHMJkuCbslY8ixgLBVZJIOiQlQTjfQ==}
@@ -2843,14 +2857,14 @@ packages:
       jsdom:
         optional: true
 
-  waku@1.0.0-beta.6:
-    resolution: {integrity: sha512-IM5RCLgq9pvImyAu1clH3zAGAU3h5acgMcXbzUjnOihfAKAX71j68+bcJS2T3Zr4Am3oeRFSq5i689kT+zf/3w==}
+  waku@1.0.0-rc.4:
+    resolution: {integrity: sha512-Ge931+rWvd2Js2KdpuTpbrJ9SJXRfftcsQyTA5noGUzMtS3wGLLtd0B2EqmiHgCWgEOkPPwIkeAyx9FyvA5p0w==}
     engines: {node: ^26.0.0 || ^24.0.0 || ^22.15.0}
     hasBin: true
     peerDependencies:
-      react: ~19.2.4
-      react-dom: ~19.2.4
-      react-server-dom-webpack: ~19.2.4
+      react: ~19.3.1
+      react-dom: ~19.3.1
+      react-server-dom-webpack: ~19.3.1
 
   watchpack@2.5.2:
     resolution: {integrity: sha512-6i/00NBjP4yGPs+caKSyRfpTF/8Torsu0MOW3mMzIbhgISFder8i7xbqgHlLMwJrdiN8ndBV3UA1/AfzPSr+jg==}
@@ -3231,7 +3245,7 @@ snapshots:
 
   '@fontsource/m-plus-rounded-1c@5.2.10': {}
 
-  '@hono/node-server@2.0.8(hono@4.12.28)':
+  '@hono/node-server@2.1.5(hono@4.12.28)':
     dependencies:
       hono: 4.12.28
 
@@ -3458,6 +3472,8 @@ snapshots:
       '@jridgewell/trace-mapping': 0.3.31
 
   '@jridgewell/sourcemap-codec@1.5.5': {}
+
+  '@jridgewell/sourcemap-codec@1.6.0': {}
 
   '@jridgewell/trace-mapping@0.3.31':
     dependencies:
@@ -4000,21 +4016,22 @@ snapshots:
       '@rolldown/pluginutils': 1.0.1
       vite: '@voidzero-dev/vite-plus-core@0.2.4(@types/node@26.6.5)(esbuild@0.28.1)(terser@5.48.0)(typescript@7.0.2)'
 
-  '@vitejs/plugin-rsc@0.5.27(@voidzero-dev/vite-plus-core@0.2.4(@types/node@26.6.5)(esbuild@0.28.1)(terser@5.48.0)(typescript@7.0.2))(react-dom@19.2.7(react@19.2.7))(react-server-dom-webpack@19.2.7(react-dom@19.2.7(react@19.2.7))(react@19.2.7)(webpack@5.108.4(esbuild@0.28.1)(lightningcss@1.32.0)(postcss@8.5.14)))(react@19.2.7)':
+  '@vitejs/plugin-rsc@0.5.38(@voidzero-dev/vite-plus-core@0.2.4(@types/node@26.6.5)(esbuild@0.28.1)(terser@5.48.0)(typescript@7.0.2))(react-dom@19.2.7(react@19.2.7))(react-server-dom-webpack@19.3.1(react-dom@19.2.7(react@19.2.7))(react@19.2.7)(webpack@5.108.4(esbuild@0.28.1)(lightningcss@1.32.0)(postcss@8.5.14)))(react@19.2.7)':
     dependencies:
       '@rolldown/pluginutils': 1.0.1
-      es-module-lexer: 2.3.0
+      es-module-lexer: 3.0.4
       estree-walker: 3.0.3
-      magic-string: 0.30.21
+      magic-string: 1.4.3
+      obug: 3.0.0
       react: 19.2.7
       react-dom: 19.2.7(react@19.2.7)
-      srvx: 0.11.21
-      strip-literal: 3.1.0
-      turbo-stream: 3.2.0
+      srvx: 1.0.7
+      strip-literal: 4.0.0
+      turbo-stream: 3.2.1
       vite: '@voidzero-dev/vite-plus-core@0.2.4(@types/node@26.6.5)(esbuild@0.28.1)(terser@5.48.0)(typescript@7.0.2)'
       vitefu: 1.1.3(@voidzero-dev/vite-plus-core@0.2.4(@types/node@26.6.5)(esbuild@0.28.1)(terser@5.48.0)(typescript@7.0.2))
     optionalDependencies:
-      react-server-dom-webpack: 19.2.7(react-dom@19.2.7(react@19.2.7))(react@19.2.7)(webpack@5.108.4(esbuild@0.28.1)(lightningcss@1.32.0)(postcss@8.5.14))
+      react-server-dom-webpack: 19.3.1(react-dom@19.2.7(react@19.2.7))(react@19.2.7)(webpack@5.108.4(esbuild@0.28.1)(lightningcss@1.32.0)(postcss@8.5.14))
 
   '@vitest/browser-preview@4.1.10(@types/node@26.6.5)(esbuild@0.28.1)(terser@5.48.0)(typescript@7.0.2)(vitest@4.1.10)':
     dependencies:
@@ -4418,7 +4435,7 @@ snapshots:
 
   dom-accessibility-api@0.5.16: {}
 
-  dotenv@17.4.2: {}
+  dotenv@18.0.9: {}
 
   electron-to-chromium@1.5.387: {}
 
@@ -4434,6 +4451,8 @@ snapshots:
   error-stack-parser-es@1.0.5: {}
 
   es-module-lexer@2.3.0: {}
+
+  es-module-lexer@3.0.4: {}
 
   esbuild@0.25.12:
     optionalDependencies:
@@ -4606,9 +4625,9 @@ snapshots:
       merge-stream: 2.0.0
       supports-color: 8.1.1
 
-  js-tokens@4.0.0: {}
+  js-tokens@10.0.0: {}
 
-  js-tokens@9.0.1: {}
+  js-tokens@4.0.0: {}
 
   json-schema-traverse@1.0.0: {}
 
@@ -4736,6 +4755,10 @@ snapshots:
     dependencies:
       '@jridgewell/sourcemap-codec': 1.5.5
 
+  magic-string@1.4.3:
+    dependencies:
+      '@jridgewell/sourcemap-codec': 1.6.0
+
   merge-stream@2.0.0: {}
 
   merge2@1.4.1: {}
@@ -4817,6 +4840,8 @@ snapshots:
   object-path@0.11.8: {}
 
   obug@2.1.3: {}
+
+  obug@3.0.0: {}
 
   outdent@0.8.0: {}
 
@@ -4976,7 +5001,7 @@ snapshots:
 
   react-is@17.0.2: {}
 
-  react-server-dom-webpack@19.2.7(react-dom@19.2.7(react@19.2.7))(react@19.2.7)(webpack@5.108.4(esbuild@0.28.1)(lightningcss@1.32.0)(postcss@8.5.14)):
+  react-server-dom-webpack@19.3.1(react-dom@19.2.7(react@19.2.7))(react@19.2.7)(webpack@5.108.4(esbuild@0.28.1)(lightningcss@1.32.0)(postcss@8.5.14)):
     dependencies:
       acorn-loose: 8.5.2
       neo-async: 2.6.2
@@ -4995,7 +5020,7 @@ snapshots:
 
   reusify@1.1.0: {}
 
-  rsc-html-stream@0.0.7: {}
+  rsc-html-stream@0.0.8: {}
 
   run-parallel@1.2.0:
     dependencies:
@@ -5103,7 +5128,7 @@ snapshots:
 
   source-map@0.6.1: {}
 
-  srvx@0.11.21: {}
+  srvx@1.0.7: {}
 
   stackback@0.0.2: {}
 
@@ -5119,9 +5144,9 @@ snapshots:
     dependencies:
       ansi-regex: 5.0.1
 
-  strip-literal@3.1.0:
+  strip-literal@4.0.0:
     dependencies:
-      js-tokens: 9.0.1
+      js-tokens: 10.0.0
 
   subset-font@2.9.0:
     dependencies:
@@ -5198,7 +5223,7 @@ snapshots:
   tslib@2.8.1:
     optional: true
 
-  turbo-stream@3.2.0: {}
+  turbo-stream@3.2.1: {}
 
   typescript@6.0.2: {}
 
@@ -5355,19 +5380,19 @@ snapshots:
       - unrun
       - yaml
 
-  waku@1.0.0-beta.6(@types/node@26.6.5)(esbuild@0.28.1)(react-dom@19.2.7(react@19.2.7))(react-server-dom-webpack@19.2.7(react-dom@19.2.7(react@19.2.7))(react@19.2.7)(webpack@5.108.4(esbuild@0.28.1)(lightningcss@1.32.0)(postcss@8.5.14)))(react@19.2.7)(terser@5.48.0)(typescript@7.0.2):
+  waku@1.0.0-rc.4(@types/node@26.6.5)(esbuild@0.28.1)(react-dom@19.2.7(react@19.2.7))(react-server-dom-webpack@19.3.1(react-dom@19.2.7(react@19.2.7))(react@19.2.7)(webpack@5.108.4(esbuild@0.28.1)(lightningcss@1.32.0)(postcss@8.5.14)))(react@19.2.7)(terser@5.48.0)(typescript@7.0.2):
     dependencies:
-      '@hono/node-server': 2.0.8(hono@4.12.28)
+      '@hono/node-server': 2.1.5(hono@4.12.28)
       '@vitejs/plugin-react': 6.0.3(@voidzero-dev/vite-plus-core@0.2.4(@types/node@26.6.5)(esbuild@0.28.1)(terser@5.48.0)(typescript@7.0.2))
-      '@vitejs/plugin-rsc': 0.5.27(@voidzero-dev/vite-plus-core@0.2.4(@types/node@26.6.5)(esbuild@0.28.1)(terser@5.48.0)(typescript@7.0.2))(react-dom@19.2.7(react@19.2.7))(react-server-dom-webpack@19.2.7(react-dom@19.2.7(react@19.2.7))(react@19.2.7)(webpack@5.108.4(esbuild@0.28.1)(lightningcss@1.32.0)(postcss@8.5.14)))(react@19.2.7)
-      dotenv: 17.4.2
+      '@vitejs/plugin-rsc': 0.5.38(@voidzero-dev/vite-plus-core@0.2.4(@types/node@26.6.5)(esbuild@0.28.1)(terser@5.48.0)(typescript@7.0.2))(react-dom@19.2.7(react@19.2.7))(react-server-dom-webpack@19.3.1(react-dom@19.2.7(react@19.2.7))(react@19.2.7)(webpack@5.108.4(esbuild@0.28.1)(lightningcss@1.32.0)(postcss@8.5.14)))(react@19.2.7)
+      dotenv: 18.0.9
       hono: 4.12.28
-      magic-string: 0.30.21
+      magic-string: 1.4.3
       picocolors: 1.1.1
       react: 19.2.7
       react-dom: 19.2.7(react@19.2.7)
-      react-server-dom-webpack: 19.2.7(react-dom@19.2.7(react@19.2.7))(react@19.2.7)(webpack@5.108.4(esbuild@0.28.1)(lightningcss@1.32.0)(postcss@8.5.14))
-      rsc-html-stream: 0.0.7
+      react-server-dom-webpack: 19.3.1(react-dom@19.2.7(react@19.2.7))(react@19.2.7)(webpack@5.108.4(esbuild@0.28.1)(lightningcss@1.32.0)(postcss@8.5.14))
+      rsc-html-stream: 0.0.8
       vite: '@voidzero-dev/vite-plus-core@0.2.4(@types/node@26.6.5)(esbuild@0.28.1)(terser@5.48.0)(typescript@7.0.2)'
     transitivePeerDependencies:
       - '@arethetypeswrong/core'
