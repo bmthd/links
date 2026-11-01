@@ -45,7 +45,9 @@ import { readFileSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import { defaultLocale, localePath, locales } from "../src/lib/i18n.ts";
 
-const stylesheetRe = /<link rel="stylesheet" href="(\/assets\/[^"]+\.css)"[^>]*>/;
+// Attribute order is not stable across Waku releases (rc.4 emits
+// `crossorigin` before `href`), so match href anywhere in the tag.
+const stylesheetRe = /<link rel="stylesheet"[^>]*\shref="(\/assets\/[^"]+\.css)"[^>]*>/;
 const bootstrapRe = /import\("(\/assets\/index-[^"]+\.js)"\)/;
 
 // One static document per locale (localePath is "/" for the default locale).
@@ -76,7 +78,7 @@ for (const locale of locales) {
     .replace(stylesheetRe, `<style>${css}</style>`)
     // The matching `<link rel="preload" as="stylesheet">` is pointless once the
     // rules are inline; the hydration-time re-insert is deliberately late.
-    .replace(new RegExp(`<link rel="preload" href="${href}" as="stylesheet"[^>]*>`), "")
+    .replace(new RegExp(`<link rel="preload"[^>]*\\shref="${href}"[^>]*as="stylesheet"[^>]*>`), "")
     .replace(/<link rel="modulepreload"[^>]*>/g, "")
     .replace(bootstrapRe, 'addEventListener("load",()=>setTimeout(()=>import("$1"),0),{once:true})')
     .replace(langRe, `$1${locale}$2`);
