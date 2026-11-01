@@ -1,10 +1,6 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "extends": [
-    "config:recommended",
-    "helpers:pinGitHubActionDigestsToSemver",
-    ":timezone(Asia/Tokyo)"
-  ],
+  "extends": ["config:recommended", ":timezone(Asia/Tokyo)"],
   "schedule": ["before 9am on monday"],
   "minimumReleaseAge": "1 day",
   "internalChecksFilter": "strict",
@@ -39,9 +35,10 @@
       "matchPackageNames": ["react", "react-dom", "@types/react", "@types/react-dom"]
     },
     {
-      "description": "GitHub Actions はまとめて1PRに",
+      "description": "GitHub Actions はまとめて1PRに。Renovate は actions.lock を更新できないので、PRブランチで gh actions-lock を実行してから手動マージ",
       "groupName": "GitHub Actions",
-      "matchManagers": ["github-actions"]
+      "matchManagers": ["github-actions"],
+      "automerge": false
     },
     {
       "description": "安定版の minor / patch と Actions のダイジェスト更新は CI が通れば自動マージ",
@@ -54,7 +51,7 @@
       "automerge": false
     },
     {
-      "description": "Node / pnpm / pinact(mise.toml)は手動レビュー",
+      "description": "Node / pnpm(mise.toml)は手動レビュー",
       "matchManagers": ["mise"],
       "automerge": false
     }

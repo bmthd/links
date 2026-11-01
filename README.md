@@ -31,10 +31,11 @@ pnpm install / pnpm dev / pnpm test / pnpm build && pnpm check-build
 
 ## 依存の自動アップデート(Renovate)
 
-`renovate.json` で [Renovate](https://github.com/apps/renovate) が毎週月曜朝(JST)に更新PRを作る。npm(`package.json`、`.github/visual-diff/package.json`、`pnpm-workspace.yaml` の overrides)、GitHub Actions(SHA固定+バージョンコメント、pinact と同じ形式)、`mise.toml`(Node / pnpm / pinact)が対象。
+`renovate.json` で [Renovate](https://github.com/apps/renovate) が毎週月曜朝(JST)に更新PRを作る。npm(`package.json`、`.github/visual-diff/package.json`、`pnpm-workspace.yaml` の overrides)、GitHub Actions(ワークフローの `uses:` のタグ)、`mise.toml`(Node / pnpm)が対象。
 
 - 公開から1日経っていないバージョンは提案しない(pnpm の `minimumReleaseAge` に合わせている)
-- 安定版の minor / patch と Actions は CI が通れば Renovate が自動マージ → main への push で自動デプロイ
+- 安定版の minor / patch は CI が通れば Renovate が自動マージ → main への push で自動デプロイ
+- GitHub Actions は [gh-actions-lock](https://github.com/github/gh-actions-lock) で `.github/workflows/actions.lock` にSHAを固定している。Renovate はこのロックファイルを更新できず、PRの CI(`gh actions-lock --verify`)が落ちるので、PRブランチで `gh actions-lock` を実行してロックファイルをコミットしてからマージする
 - major、0.x、プレリリース(waku beta など)、Node / pnpm は自動マージせず手動レビュー
 - vite-plus・vite-plus-core・vitest は overrides で揃えているため1つのPRにまとめる
 - 有効化にはリポジトリへの Renovate GitHub App のインストールが必要
