@@ -59,10 +59,6 @@ export const sections: readonly LinkSection[] = [
         label: { ja: "メロンブックス", en: "Melonbooks" },
         url: "https://www.melonbooks.co.jp/circle/index.php?circle_id=107344",
       },
-      {
-        label: "DLsite",
-        url: "https://www.dlsite.com/maniax/circle/profile/=/maker_id/RG01084474.html",
-      },
     ],
   },
 ];
