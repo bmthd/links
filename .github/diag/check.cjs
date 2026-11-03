@@ -1,8 +1,10 @@
-const { chromium, webkit } = require("playwright");
+const { chromium, webkit, devices } = require("playwright");
 (async () => {
-  const b = await chromium.launch();
-  for (const scheme of ["dark", "light"]) {
-    const p = await b.newPage({ colorScheme: scheme });
+ for (const [name, type, dev] of [["chromium", chromium, {}], ["iphone", webkit, devices["iPhone 15"]]]) {
+  const b = await type.launch();
+  for (const s0 of ["dark", "light"]) {
+    const scheme = name + "/" + s0;
+    const p = await b.newPage({ ...dev, colorScheme: s0 });
     p.on("console", (m) => console.log(scheme, "console", m.type(), m.text().slice(0, 500)));
     p.on("pageerror", (e) => console.log(scheme, "pageerror", e.stack));
     p.on("requestfailed", (r) => console.log(scheme, "failed", r.url(), r.failure()?.errorText));
@@ -25,4 +27,5 @@ const { chromium, webkit } = require("playwright");
     await p.close();
   }
   await b.close();
+ }
 })();

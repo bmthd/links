@@ -12,6 +12,7 @@ jobs:
       - run: curl -sSI https://links.bmth.dev/ ; curl -sSI https://links.bmth.dev/en
       - run: curl -sS https://links.bmth.dev/ | head -c 1500; echo; curl -sS https://links.bmth.dev/ | grep -o 'import("[^"]*")[^,;]\{0,80\}'
       - run: |
-          npm i --no-save playwright@1.56.1 >/dev/null
-          npx playwright install --with-deps chromium >/dev/null
-          node .github/diag/check.cjs
+          mkdir -p "$RUNNER_TEMP/pw" && cd "$RUNNER_TEMP/pw" && npm init -y >/dev/null
+          npm i playwright@1.56.1 >/dev/null
+          npx playwright install --with-deps chromium webkit >/dev/null
+          NODE_PATH="$RUNNER_TEMP/pw/node_modules" node "$GITHUB_WORKSPACE/.github/diag/check.cjs"
