@@ -19,8 +19,9 @@
 //    document, fonts and paint in Lighthouse's throttled model and was the
 //    entire remaining gap to a 100 performance score (LCP 2.0s → 1.2s,
 //    FCP 1.5s → 0.8s measured locally). The modulepreload hints are dropped
-//    and the router bootstrap's dynamic import is wrapped in a load
-//    listener; hydration still runs, just off the critical path.
+//    and the router bootstrap's dynamic import is chained after a promise
+//    that resolves on the load event; hydration still runs, just off the
+//    critical path.
 //    CAVEAT: interactive client components (currently only ThemeToggle) stay
 //    inert until hydration. That window is invisible today because the
 //    toggle is opacity-gated behind the font load anyway; revisit this
@@ -80,7 +81,12 @@ for (const locale of locales) {
     // rules are inline; the hydration-time re-insert is deliberately late.
     .replace(new RegExp(`<link rel="preload"[^>]*\\shref="${href}"[^>]*as="stylesheet"[^>]*>`), "")
     .replace(/<link rel="modulepreload"[^>]*>/g, "")
-    .replace(bootstrapRe, 'addEventListener("load",()=>setTimeout(()=>import("$1"),0),{once:true})')
+    // Must still evaluate to a Promise: Waku rc.4+ chains `.catch(...)` onto
+    // the bootstrap import() to dispatch `vite:preloadError`.
+    .replace(
+      bootstrapRe,
+      'new Promise((r)=>addEventListener("load",()=>setTimeout(r,0),{once:true})).then(()=>import("$1"))',
+    )
     .replace(langRe, `$1${locale}$2`);
 
   writeFileSync(htmlPath, optimized);
