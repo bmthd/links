@@ -41,11 +41,14 @@ export default function Root({ children }: { children: ReactNode }) {
           locale's built HTML (see the note there). */}
       <html lang={defaultLocale} suppressHydrationWarning>
         <head>
-          {/* Must come first (within the first 1024 bytes): Workers static
-              assets serve HTML as `text/html` without a charset, so without
-              this the browser falls back to windows-1252 and garbles the
-              Japanese text. */}
+          {/* Waku only emits these two in its DefaultRoot, so a custom root
+              must declare them itself. charset must come first (within the
+              first 1024 bytes): Workers static assets serve HTML as
+              `text/html` without a charset, so without it the browser falls
+              back to windows-1252 and garbles the Japanese text. Without
+              viewport, mobile browsers lay the page out at desktop width. */}
           <meta charSet="utf-8" />
+          <meta name="viewport" content="width=device-width, initial-scale=1" />
           {/* Preload the always-needed subset fonts (LCP gates on their load).
               crossOrigin is required even same-origin, else the CORS-mode CSS
               font fetch won't reuse the preload. */}

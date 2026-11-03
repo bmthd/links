@@ -41,6 +41,10 @@ for (const locale of locales) {
     // されていること
     "data:image/webp;base64,",
     "/avatar-96.png",
+    // _root.tsx が宣言する charset と viewport(Waku はカスタムルートでは
+    // 出力しない。欠けると文字化け・スマホでPC幅表示になる)
+    '<meta charSet="utf-8"/>',
+    '<meta name="viewport" content="width=device-width, initial-scale=1"/>',
     // scripts/optimize-html.ts(build の後段)がスタイルをインライン化し、
     // hydration 用 JS を load 後まで遅延させたこと
     "<style>",
