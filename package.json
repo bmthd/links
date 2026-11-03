@@ -31,8 +31,8 @@
     "subset-font": "^2.9.0",
     "takumi-js": "^2.19.0",
     "typescript": "^7.0.2",
-    "vite-plus": "^0.2.4",
-    "vitest": "4.1.10",
+    "vite-plus": "^0.3.3",
+    "vitest": "4.1.12",
     "wrangler": "^4.156.0"
   }
 }
