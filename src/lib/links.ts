@@ -5,7 +5,11 @@ import type { Localized } from "./i18n";
 // me: true marks an identity link (X/GitHub/Zenn/Blog). These get rel="me" and
 // feed the JSON-LD sameAs array; WORKS/DOUJINSHI links do not.
 export type LinkItem = { readonly label: Localized; readonly url: string; readonly me?: boolean };
+// id names a section for the profile API (src/lib/profile-api.ts), so other
+// sites can pick one (e.g. works) without relying on its position.
+export type SectionId = "sns" | "works" | "doujinshi";
 export type LinkSection = {
+  readonly id: SectionId;
   readonly heading?: Localized;
   readonly items: readonly LinkItem[];
 };
@@ -19,6 +23,7 @@ export const profile = {
 
 export const sections: readonly LinkSection[] = [
   {
+    id: "sns",
     items: [
       { label: "X", url: "https://x.com/j_ktwr", me: true },
       { label: "GitHub", url: "https://github.com/bmthd", me: true },
@@ -29,6 +34,7 @@ export const sections: readonly LinkSection[] = [
   {
     // WORKS / DOUJINSHI are decorative latin headings in the original design
     // and read the same in both locales, so they are left untranslated.
+    id: "works",
     heading: "WORKS",
     items: [
       {
@@ -51,6 +57,7 @@ export const sections: readonly LinkSection[] = [
     ],
   },
   {
+    id: "doujinshi",
     heading: "DOUJINSHI",
     items: [
       { label: "BOOTH", url: "https://bluemethod.booth.pm/" },

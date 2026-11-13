@@ -16,6 +16,7 @@ describe("sections", () => {
   it("SNS(見出しなし)→ WORKS → DOUJINSHI の3セクション", () => {
     expect(sections.map((s) => s.heading)).toEqual([undefined, "WORKS", "DOUJINSHI"]);
     expect(sections.map((s) => s.items.length)).toEqual([4, 5, 3]);
+    expect(new Set(sections.map((s) => s.id)).size).toBe(sections.length);
   });
 
   it("全URLが有効な https で重複なし", () => {

@@ -9,6 +9,7 @@ import { readFileSync, statSync } from "node:fs";
 import { join } from "node:path";
 import { localePath, locales, ogImagePath, translator, ui } from "../src/lib/i18n.ts";
 import { localeUrl, profile, sections } from "../src/lib/links.ts";
+import { avatarFiles, buildProfileApi, profileApiPath } from "../src/lib/profile-api.ts";
 
 const failures: string[] = [];
 
@@ -61,6 +62,18 @@ for (const locale of locales) {
   if (statSync(ogPath).size === 0) {
     failures.push(`EMPTY: ${ogPath}`);
   }
+}
+
+// scripts/generate-api.ts が書いたプロフィール API が、いまのリンクデータと一致し、
+// そこから参照するアバターが配信物に含まれること
+const apiPath = join("dist/public", profileApiPath);
+if (
+  JSON.stringify(JSON.parse(readFileSync(apiPath, "utf8"))) !== JSON.stringify(buildProfileApi())
+) {
+  failures.push(`STALE: ${apiPath}`);
+}
+for (const { path } of avatarFiles) {
+  if (statSync(join("dist/public", path)).size === 0) failures.push(`EMPTY: dist/public${path}`);
 }
 
 if (failures.length > 0) {

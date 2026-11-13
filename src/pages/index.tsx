@@ -97,12 +97,8 @@ export default async function HomePage({ locale = defaultLocale }: { locale?: Lo
         })}
       >
         <ProfileCard locale={locale} />
-        {sections.map((section, i) => (
-          <LinkSectionBlock
-            key={section.heading ? t(section.heading) : `section-${i}`}
-            section={section}
-            locale={locale}
-          />
+        {sections.map((section) => (
+          <LinkSectionBlock key={section.id} section={section} locale={locale} />
         ))}
       </main>
       <footer

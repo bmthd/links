@@ -6,3 +6,12 @@
 
 /fonts/*
   Cache-Control: public, max-age=31536000, immutable
+
+# プロフィール API(scripts/generate-api.ts)。ほかのサイトがブラウザから読める
+# ように CORS を開け、デプロイで中身が変わるので短めにキャッシュする。
+/profile.json
+  Access-Control-Allow-Origin: *
+  Cache-Control: public, max-age=3600
+
+/avatar-192.webp
+  Access-Control-Allow-Origin: *
