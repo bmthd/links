@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "waku dev",
-    "build": "node scripts/generate-fonts.ts && node scripts/generate-images.ts && node scripts/generate-og.ts && waku build && node scripts/optimize-html.ts",
+    "build": "node scripts/generate-fonts.ts && node scripts/generate-images.ts && node scripts/generate-og.ts && node scripts/generate-api.ts && waku build && node scripts/optimize-html.ts",
     "preview": "waku start",
     "typecheck": "tsc --noEmit",
     "test": "vp test run",

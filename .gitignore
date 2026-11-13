@@ -16,3 +16,6 @@ public/og-*.png
 public/fonts/
 src/generated/
 public/avatar-96.png
+public/avatar-192.webp
+# scripts/generate-api.ts がビルド時に生成する
+public/api/

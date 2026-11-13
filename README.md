@@ -5,6 +5,7 @@
 - Waku(静的RSC)+ Panda CSS。Apple Liquid Glass 風デザイン
 - リンクの追加・変更は `src/lib/links.ts` を編集するだけ
 - 日本語(`/`)と英語(`/en`)の2ロケール。詳細は下記「多言語対応」
+- 同じプロフィールとリンクを JSON でも配信する。詳細は下記「プロフィール API」
 - main に push すると GitHub Actions が [`cf`](https://github.com/cloudflare/cf) CLI で Cloudflare Workers(静的アセット)へデプロイ。Worker設定は `cloudflare.config.ts`、アセットの場所は `wrangler.config.ts`(cf が使う wrangler バンドラーの設定)
 
 ## 開発
@@ -28,6 +29,16 @@ pnpm install / pnpm dev / pnpm test / pnpm build && pnpm check-build
   OG画像の生成・hreflang・言語切替ボタン・`pnpm check-build` の検証項目はロケール定義から導出しているため、この3手順以外の変更は要らない
 
 - `<html lang>` だけは例外。Wakuはルート要素(`src/pages/_root.tsx`)を全ルートで1回しか描画しないためロケールごとに変えられず、ビルド後に `scripts/optimize-html.ts` が各HTMLを書き換えている。`waku dev` では非既定ロケールのページも `lang="ja"` のままになる
+
+## プロフィール API
+
+ほかのサイトがプロフィールとリンクを自前で持たずに済むよう、ビルド時に `scripts/generate-api.ts` が [`/api/profile.json`](https://links.bmth.dev/api/profile.json) を書き出す。中身は `src/lib/links.ts` から作るので、リンクを直せば API も変わる。
+
+- 名前・bio・ラベルは常に `{ "ja": …, "en": … }` の形(固有名詞も全ロケール分を埋める)
+- `avatar` は `/avatar-192.webp` と `/avatar-96.png` の絶対 URL
+- `sections` はページと同じ順。`id`(`sns` / `works` / `doujinshi`)で名前で取り出せる(例: `sections.find((s) => s.id === "works")`)。`heading` は見出しなしのとき `null`、`me` は本人のアカウントか
+- CORS は全オリジンに開け、1 時間キャッシュする(`public/_headers`)
+- フィールドを消したり意味を変えたりするときは `version` を上げる(`src/lib/profile-api.ts`)
 
 ## 依存の自動アップデート(Renovate)
 
