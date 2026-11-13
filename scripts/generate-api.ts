@@ -1,5 +1,5 @@
 // Writes the public profile API (src/lib/profile-api.ts) to
-// public/api/profile.json. Output is gitignored, like og.png.
+// public/profile.json. Output is gitignored, like og.png.
 //
 // Runs directly with `node scripts/generate-api.ts` (type stripping), so only
 // erasable TypeScript syntax is used.

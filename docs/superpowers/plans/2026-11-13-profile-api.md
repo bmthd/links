@@ -1,6 +1,6 @@
 # プロフィール API Implementation Plan
 
-**Goal:** `/api/profile.json` の各セクションに `id` を付け、works を名前で取り出せるようにして PR を出す。
+**Goal:** `/profile.json` の各セクションに `id` を付け、works を名前で取り出せるようにして PR を出す。
 
 **Spec:** docs/superpowers/specs/2026-11-13-profile-api-design.md
 

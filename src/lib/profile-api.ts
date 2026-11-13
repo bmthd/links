@@ -1,7 +1,7 @@
 // The public profile API: the same data the page renders, as JSON, so other
 // sites (e.g. point-sprint's about page) can show the profile and link here
 // without keeping their own copy. scripts/generate-api.ts writes it to
-// public/api/profile.json at build time.
+// public/profile.json at build time.
 //
 // Imported by that script under Node's type stripping, so imports carry the
 // .ts extension and only erasable TypeScript syntax is used.
@@ -10,7 +10,7 @@ import { type Locale, type Localized, locales, translator } from "./i18n.ts";
 import { sameAs, sections, siteUrl, profile } from "./links.ts";
 
 /** Public path of the generated JSON. */
-export const profileApiPath = "/api/profile.json";
+export const profileApiPath = "/profile.json";
 
 /** Bump when a field is removed or changes meaning; adding fields keeps it. */
 export const profileApiVersion = 1;

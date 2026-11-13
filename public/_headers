@@ -9,7 +9,7 @@
 
 # プロフィール API(scripts/generate-api.ts)。ほかのサイトがブラウザから読める
 # ように CORS を開け、デプロイで中身が変わるので短めにキャッシュする。
-/api/*
+/profile.json
   Access-Control-Allow-Origin: *
   Cache-Control: public, max-age=3600
 

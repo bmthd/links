@@ -32,7 +32,7 @@ pnpm install / pnpm dev / pnpm test / pnpm build && pnpm check-build
 
 ## プロフィール API
 
-ほかのサイトがプロフィールとリンクを自前で持たずに済むよう、ビルド時に `scripts/generate-api.ts` が [`/api/profile.json`](https://links.bmth.dev/api/profile.json) を書き出す。中身は `src/lib/links.ts` から作るので、リンクを直せば API も変わる。
+ほかのサイトがプロフィールとリンクを自前で持たずに済むよう、ビルド時に `scripts/generate-api.ts` が [`/profile.json`](https://links.bmth.dev/profile.json) を書き出す。中身は `src/lib/links.ts` から作るので、リンクを直せば API も変わる。
 
 - 名前・bio・ラベルは常に `{ "ja": …, "en": … }` の形(固有名詞も全ロケール分を埋める)
 - `avatar` は `/avatar-192.webp` と `/avatar-96.png` の絶対 URL

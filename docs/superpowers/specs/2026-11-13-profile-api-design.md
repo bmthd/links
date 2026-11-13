@@ -6,7 +6,7 @@
 
 ## ゴール / 非ゴール
 
-- ゴール: 静的な JSON 1 本(`/api/profile.json`)で SNS・WORKS・DOUJINSHI を全部返す。利用側が works だけを名前で取り出せる
+- ゴール: 静的な JSON 1 本(`/profile.json`)で SNS・WORKS・DOUJINSHI を全部返す。利用側が works だけを名前で取り出せる
 - 非ゴール: セクションごとの個別エンドポイント、動的 API、認証
 - アンチゴール: 画面と API の中身がずれること(どちらも `src/lib/links.ts` から作る)
 
