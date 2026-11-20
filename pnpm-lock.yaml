@@ -25,8 +25,8 @@ importers:
         specifier: ^19.2.7
         version: 19.2.7(react@19.2.7)
       waku:
-        specifier: 1.0.0-rc.4
-        version: 1.0.0-rc.4(@types/node@26.6.5)(esbuild@0.28.2)(react-dom@19.2.7(react@19.2.7))(react-server-dom-webpack@19.3.1(react-dom@19.2.7(react@19.2.7))(react@19.2.7)(webpack@5.108.4(esbuild@0.28.2)(lightningcss@1.33.0)(postcss@8.5.31)))(react@19.2.7)(terser@5.48.0)(typescript@7.0.2)
+        specifier: 1.0.0-rc.5
+        version: 1.0.0-rc.5(@types/node@26.6.5)(esbuild@0.28.2)(react-dom@19.2.7(react@19.2.7))(react-server-dom-webpack@19.3.1(react-dom@19.2.7(react@19.2.7))(react@19.2.7)(webpack@5.108.4(esbuild@0.28.2)(lightningcss@1.33.0)(postcss@8.5.31)))(react@19.2.7)(terser@5.48.0)(typescript@7.0.2)
     devDependencies:
       '@pandacss/dev':
         specifier: ^1.12.2
@@ -2102,8 +2102,8 @@ packages:
     resolution: {integrity: sha512-EykJT/Q1KjTWctppgIAgfSO0tKVuZUjhgMr17kqTumMl6Afv3EISleU7qZUzoXDFTAHTDC4NOoG/ZxU3EvlMPQ==}
     engines: {node: '>=8'}
 
-  hono@4.12.28:
-    resolution: {integrity: sha512-YwUvVpSF7m1yOblFPrU3Hbo8XhPheBoiyfGuII6z19LnOr6JpDnyyp7LFNrfV56wS8tpvtBFGRISHN02pDdLOA==}
+  hono@4.13.19:
+    resolution: {integrity: sha512-KmXvQAXwcAHV+muzbIwoJ23niEB5nMoDVr9WcRkU8mvjUECm/1+7v4Jgp7P7a+H6MLFrh+vXrGonGrGS+RQfkA==}
     engines: {node: '>=16.9.0'}
 
   is-extglob@2.1.1:
@@ -2868,8 +2868,8 @@ packages:
       jsdom:
         optional: true
 
-  waku@1.0.0-rc.4:
-    resolution: {integrity: sha512-Ge931+rWvd2Js2KdpuTpbrJ9SJXRfftcsQyTA5noGUzMtS3wGLLtd0B2EqmiHgCWgEOkPPwIkeAyx9FyvA5p0w==}
+  waku@1.0.0-rc.5:
+    resolution: {integrity: sha512-0MdnqySRQNu857FHR41ZBrmvcalFvNbcZ82xZwm3xzfdTzcbHm3zRejiGgnjZcHVwiI/VLqNk6TpVu0ZhEaVAQ==}
     engines: {node: ^26.0.0 || ^24.0.0 || ^22.15.0}
     hasBin: true
     peerDependencies:
@@ -3238,9 +3238,9 @@ snapshots:
 
   '@fontsource/m-plus-rounded-1c@5.2.10': {}
 
-  '@hono/node-server@2.1.5(hono@4.12.28)':
+  '@hono/node-server@2.1.5(hono@4.13.19)':
     dependencies:
-      hono: 4.12.28
+      hono: 4.13.19
 
   '@img/colour@1.1.0': {}
 
@@ -4640,7 +4640,7 @@ snapshots:
 
   has-flag@4.0.0: {}
 
-  hono@4.12.28: {}
+  hono@4.13.19: {}
 
   is-extglob@2.1.1: {}
 
@@ -5378,13 +5378,13 @@ snapshots:
       - unrun
       - yaml
 
-  waku@1.0.0-rc.4(@types/node@26.6.5)(esbuild@0.28.2)(react-dom@19.2.7(react@19.2.7))(react-server-dom-webpack@19.3.1(react-dom@19.2.7(react@19.2.7))(react@19.2.7)(webpack@5.108.4(esbuild@0.28.2)(lightningcss@1.33.0)(postcss@8.5.31)))(react@19.2.7)(terser@5.48.0)(typescript@7.0.2):
+  waku@1.0.0-rc.5(@types/node@26.6.5)(esbuild@0.28.2)(react-dom@19.2.7(react@19.2.7))(react-server-dom-webpack@19.3.1(react-dom@19.2.7(react@19.2.7))(react@19.2.7)(webpack@5.108.4(esbuild@0.28.2)(lightningcss@1.33.0)(postcss@8.5.31)))(react@19.2.7)(terser@5.48.0)(typescript@7.0.2):
     dependencies:
-      '@hono/node-server': 2.1.5(hono@4.12.28)
+      '@hono/node-server': 2.1.5(hono@4.13.19)
       '@vitejs/plugin-react': 6.0.3(@voidzero-dev/vite-plus-core@0.3.3(@types/node@26.6.5)(esbuild@0.28.2)(terser@5.48.0)(typescript@7.0.2))
       '@vitejs/plugin-rsc': 0.5.38(@voidzero-dev/vite-plus-core@0.3.3(@types/node@26.6.5)(esbuild@0.28.2)(terser@5.48.0)(typescript@7.0.2))(react-dom@19.2.7(react@19.2.7))(react-server-dom-webpack@19.3.1(react-dom@19.2.7(react@19.2.7))(react@19.2.7)(webpack@5.108.4(esbuild@0.28.2)(lightningcss@1.33.0)(postcss@8.5.31)))(react@19.2.7)
       dotenv: 18.0.9
-      hono: 4.12.28
+      hono: 4.13.19
       magic-string: 1.4.5
       picocolors: 1.1.1
       react: 19.2.7
