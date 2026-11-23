@@ -21,7 +21,7 @@
     "waku": "1.0.0-rc.4"
   },
   "devDependencies": {
-    "@pandacss/dev": "^1.12.2",
+    "@pandacss/dev": "^1.12.3",
     "@types/node": "^26.6.5",
     "@types/react": "^19.2.17",
     "@types/react-dom": "^19.2.3",
